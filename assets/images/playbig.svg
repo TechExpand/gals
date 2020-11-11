@@ -1,0 +1,7 @@
+<svg id="Component_24_1" data-name="Component 24 – 1" xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 30 30">
+  <path id="Polygon_1" data-name="Polygon 1" d="M7.145,5.008a3,3,0,0,1,5.3,0L17.261,14.1a3,3,0,0,1-2.651,4.4H4.983a3,3,0,0,1-2.651-4.4Z" transform="translate(26.667 4.898) rotate(90)" fill="#340f63"/>
+  <g id="Ellipse_19" data-name="Ellipse 19" fill="none" stroke="#100221" stroke-width="1.5">
+    <circle cx="15" cy="15" r="15" stroke="none"/>
+    <circle cx="15" cy="15" r="14.25" fill="none"/>
+  </g>
+</svg>

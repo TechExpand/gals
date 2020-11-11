@@ -1,0 +1,18 @@
+<svg id="Component_7_14" data-name="Component 7 – 14" xmlns="http://www.w3.org/2000/svg" width="21" height="22" viewBox="0 0 21 22">
+  <g id="Rectangle_16" data-name="Rectangle 16" fill="none" stroke="#bab4b4" stroke-width="2">
+    <rect width="10" height="10" rx="2" stroke="none"/>
+    <rect x="1" y="1" width="8" height="8" rx="1" fill="none"/>
+  </g>
+  <g id="Rectangle_17" data-name="Rectangle 17" transform="translate(11)" fill="none" stroke="#bab4b4" stroke-width="2">
+    <rect width="10" height="10" rx="2" stroke="none"/>
+    <rect x="1" y="1" width="8" height="8" rx="1" fill="none"/>
+  </g>
+  <g id="Rectangle_18" data-name="Rectangle 18" transform="translate(11 12)" fill="none" stroke="#bab4b4" stroke-width="2">
+    <rect width="10" height="10" rx="2" stroke="none"/>
+    <rect x="1" y="1" width="8" height="8" rx="1" fill="none"/>
+  </g>
+  <g id="Rectangle_19" data-name="Rectangle 19" transform="translate(0 12)" fill="none" stroke="#bab4b4" stroke-width="2">
+    <rect width="10" height="10" rx="2" stroke="none"/>
+    <rect x="1" y="1" width="8" height="8" rx="1" fill="none"/>
+  </g>
+</svg>
