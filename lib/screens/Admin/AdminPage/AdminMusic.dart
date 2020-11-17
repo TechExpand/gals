@@ -49,12 +49,13 @@ class AdminMusicState extends State<AdminMusic> {
           body: StreamBuilder(
             stream:  Provider.of<Network>(context, listen: false).getNewReleaseStream(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
-               List<Guess> products;
-                products = snapshot.data.documents
-                    .map((doc) => Guess.fromMap(doc.data, doc.documentID))
-                    .toList();
-                    
+
+
            if(snapshot.hasData){
+             List<Guess> products;
+             products = snapshot.data.documents
+                 .map((doc) => Guess.fromMap(doc.data, doc.documentID))
+                 .toList();
              return CustomScrollView(
                slivers: <Widget>[
 

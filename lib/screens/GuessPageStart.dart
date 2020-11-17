@@ -51,9 +51,12 @@ class _GuessePageState extends State<GuessePage> {
     var _kCurve = Curves.ease;
     return Scaffold(
       key: _scaffoldKeyGuess,
-        drawer: Drawer(
-        child: DrawerWidget(_scaffoldKeyGuess.currentContext),
+        drawer: SizedBox(
+            width:250,
+          child: Drawer(
+          child: DrawerWidget(_scaffoldKeyGuess.currentContext),
     ),
+        ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Container(
         height: 40,
@@ -132,7 +135,7 @@ class _GuessePageState extends State<GuessePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Icon(Icons.notifications_active),
+                      SvgPicture.asset('assets/images/Bell.svg'),
                       Text('${widget.music_snapshots.MusicLength}',
                           style: TextStyle(color: Colors.black, fontSize: 15)),
                     ],
@@ -172,13 +175,9 @@ class _GuessePageState extends State<GuessePage> {
                             child: Padding(
                               padding: const EdgeInsets.all(10.0),
                               child:
-                              Icon(Icons.help, color: Color(0xFF340c64)),
-                            )),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              bottom:
-                              MediaQuery.of(context).size.height / 1.85),
-                          child: Tab(
+                              SvgPicture.asset('assets/images/help.svg')),
+                            ),
+                        Tab(
                             icon: Text(
                               'Line ${humanize.appNumber(index + 1)}',
                               style: TextStyle(
@@ -292,12 +291,12 @@ class _GuessePageState extends State<GuessePage> {
                                   ]),
                                 )),
                           ),
-                        ),
+                        Spacer(),
                         Align(
                             alignment: Alignment.topLeft ,
                             child: Padding(
                               padding: const EdgeInsets.only(
-                                  left: 20.0, right: 10),
+                                  left: 20.0, right: 4,bottom: 10),
                               child: Row(
                                 children: <Widget>[
                                   Container(

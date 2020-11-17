@@ -461,7 +461,7 @@ class Dialogs with ChangeNotifier {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(32.0))),
             content: Container(
-              height: 300,
+              height: 325,
               child: Consumer<FilePickers>(
                 builder: (context, select, child) => Column(
                   children: <Widget>[
@@ -483,11 +483,11 @@ class Dialogs with ChangeNotifier {
                       child: Row(
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.only(right: 30.0),
+                            padding: const EdgeInsets.only(right: 20.0),
                             child: SvgPicture.asset('assets/images/coins.svg'),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 30.0),
+                            padding: const EdgeInsets.only(right: 20.0),
                             child: Text('15' + ' Tokens'),
                           ),
                           Container(
@@ -501,7 +501,7 @@ class Dialogs with ChangeNotifier {
                                   borderRadius: BorderRadius.circular(26)),
                               label: Container(
                                 constraints: BoxConstraints(
-                                    maxWidth: 73.0, minHeight: 27.0),
+                                    maxWidth: 65.0, minHeight: 27.0),
                                 alignment: Alignment.center,
                                 child: Text(
                                   '₦' + "300.00",

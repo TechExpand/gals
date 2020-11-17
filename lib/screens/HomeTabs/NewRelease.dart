@@ -63,7 +63,8 @@ class NewReleaseState extends State<NewRelease> {
                           .toList();
                       return Container(
                         child: CarouselSlider.builder(
-                          itemCount: carousel.length,
+                          itemCount: carousel == null ? 0 : carousel
+                              .length >= 4 ? 4 : carousel.length,
                           itemBuilder: (context, index) {
                             return Stack(
                               children: <Widget>[
@@ -319,7 +320,8 @@ class NewReleaseState extends State<NewRelease> {
                       return ListView.builder(
                         physics: ScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: products == null ? 0 : 4,
+                        itemCount: products == null ? 0 : products
+                            .length >= 4 ? 4 : products.length,
                         itemBuilder: (context, index) {
                           return Card(
                             elevation: 2,
@@ -412,7 +414,7 @@ class NewReleaseState extends State<NewRelease> {
                                           )),
                                     ),
                                     Container(
-                                      width: MediaQuery.of(context).size.width/2.0,
+                                      width: MediaQuery.of(context).size.width/2.3,
                                       padding: EdgeInsets.only(left: 12),
                                       height: 100,
                                       child: Column(

@@ -48,11 +48,11 @@ class AdminSlidder3State extends State<AdminSlidder3> {
             stream: Provider.of<Network>(context, listen: false)
                 .getCarouselStream2(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              List<Carousel> products;
-              products = snapshot.data.documents
-                  .map((doc) => Carousel.fromMap(doc.data, doc.documentID))
-                  .toList();
               if (snapshot.hasData) {
+                List<Carousel> products;
+                products = snapshot.data.documents
+                    .map((doc) => Carousel.fromMap(doc.data, doc.documentID))
+                    .toList();
                 return CustomScrollView(
                   slivers: <Widget>[
 

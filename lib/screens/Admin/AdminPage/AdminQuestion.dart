@@ -49,11 +49,12 @@ class AdminQuestionState extends State<AdminQuestion> {
             stream: Provider.of<Network>(context, listen: false)
                 .getQuestionStream(widget.guess_id),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              List<Guess> products;
-              products = snapshot.data.documents
-                  .map((doc) => Guess.fromMap(doc.data, doc.documentID))
-                  .toList();
+
      if(snapshot.hasData){
+       List<Guess> products;
+       products = snapshot.data.documents
+           .map((doc) => Guess.fromMap(doc.data, doc.documentID))
+           .toList();
        return CustomScrollView(
            slivers: <Widget>[
 

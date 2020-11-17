@@ -479,11 +479,12 @@ class _DrawerState extends State<DrawerWidget> {
                         ),
                       ),
                     ),
+                    Spacer(),
                     Container(
-                     margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.28),
+                    alignment: Alignment.bottomRight,
                       child:   ListTile(
                         title: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Container(

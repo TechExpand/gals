@@ -105,120 +105,115 @@ class _CardPageState extends State<CardPage> {
                     ),
                     Form(
                       key: form_key,
-                      child: Padding(
-                        padding:  EdgeInsets.only(top: MediaQuery.of(context).size.width*0.35),
-                        child: Flexible(
-                          flex: 5,
-                          child: Consumer<Network>(
+                      child:  Consumer<Network>(
                             builder: (context, webservices_consumer, child) =>
-                                Column(
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin: EdgeInsets.only(top:50),
+                                  child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      right:
-                                          MediaQuery.of(context).size.width / 8,
-                                      bottom: 15),
-                                  child: SizedBox(
-                                    width: 300,
-                                    child: TextFormField(
-                                      keyboardType: TextInputType.phone,
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return 'Amount Required';
-                                        } else {
-                                          amount = value;
-                                          return null;
-                                        }
-                                      },
-                                      decoration: InputDecoration(
-                                          focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8)),
-                                          labelText: 'Amount',
-                                          hintText: '2000',
-                                          labelStyle: TextStyle(
-                                            color: Colors.black54,
-                                          ),
-                                          icon: Icon(
-                                            Icons.person,
-                                            color: Colors.white,
-                                          ),
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8))),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: webservices_consumer.login_state ==
-                                            false
-                                        ? RaisedButton(
-                                            onPressed: () async {
-                                              if (form_key.currentState
-                                                  .validate()) {
-                                                Charge charge = Charge()
-                                                  ..amount = int.parse(amount+'00')
-                                                  ..reference = _getReference()
-                                                  ..email = music.useremail;
-                                                CheckoutResponse response =
-                                                    await PaystackPlugin
-                                                        .checkout(
-                                                  context,
-                                                  method: CheckoutMethod.card,
-                                                  charge: charge,
-                                                );
-                                                if (response.status) {
-                                                  return webservices_consumer
-                                                      .UpdateProfileWalletBuy(
-                                                    context: context,
-                                                    wallet: int.parse(amount) +
-                                                        int.parse(snapshot
-                                                            .data['Wallet']),
-                                                    id: snapshot.data['userid'],
-                                                  );
-                                                }
-                                              }
-                                            },
-                                            color: Color(0xFF340c64),
-                                            shape: RoundedRectangleBorder(
+                                  Padding(
+                                    padding: EdgeInsets.only(
+
+                                        bottom: 15),
+                                    child: SizedBox(
+                                      width: 300,
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.phone,
+                                        validator: (value) {
+                                          if (value.isEmpty) {
+                                            return 'Amount Required';
+                                          } else {
+                                            amount = value;
+                                            return null;
+                                          }
+                                        },
+                                        decoration: InputDecoration(
+                                            focusedBorder: OutlineInputBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(8)),
-                                            padding: EdgeInsets.all(0.0),
-                                            child: Ink(
-                                              decoration: BoxDecoration(
-                                                  color: Color(0xFF340c64),
-                                                  borderRadius:
-                                                      BorderRadius.circular(8)),
-                                              child: Container(
-                                                constraints: BoxConstraints(
-                                                    maxWidth: 200.0,
-                                                    minHeight: 50.0),
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  "Fund My Wallet!",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.white),
+                                            labelText: 'Amount',
+                                            hintText: '2000',
+                                            labelStyle: TextStyle(
+                                              color: Colors.black54,
+                                            ),
+                                            icon: Icon(
+                                              Icons.person,
+                                              color: Colors.white,
+                                            ),
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8))),
+                                      ),
+                                    ),
+                                  ),
+                                   webservices_consumer.login_state ==
+                                              false
+                                          ? Padding(
+                                            padding: const EdgeInsets.only(left:30.0),
+                                            child: RaisedButton(
+                                                onPressed: () async {
+                                                  if (form_key.currentState
+                                                      .validate()) {
+                                                    Charge charge = Charge()
+                                                      ..amount = int.parse(amount+'00')
+                                                      ..reference = _getReference()
+                                                      ..email = music.useremail;
+                                                    CheckoutResponse response =
+                                                        await PaystackPlugin
+                                                            .checkout(
+                                                      context,
+                                                      method: CheckoutMethod.card,
+                                                      charge: charge,
+                                                    );
+                                                    if (response.status) {
+                                                      return webservices_consumer
+                                                          .UpdateProfileWalletBuy(
+                                                        context: context,
+                                                        wallet: int.parse(amount) +
+                                                            int.parse(snapshot
+                                                                .data['Wallet']),
+                                                        id: snapshot.data['userid'],
+                                                      );
+                                                    }
+                                                  }
+                                                },
+                                                color: Color(0xFF340c64),
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(8)),
+                                                padding: EdgeInsets.all(0.0),
+                                                child: Ink(
+                                                  decoration: BoxDecoration(
+                                                      color: Color(0xFF340c64),
+                                                      borderRadius:
+                                                          BorderRadius.circular(8)),
+                                                  child: Container(
+                                                    constraints: BoxConstraints(
+                                                        maxWidth: 200.0,
+                                                        minHeight: 50.0),
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      "Fund My Wallet!",
+                                                      textAlign: TextAlign.center,
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
                                           )
-                                        : CircularProgressIndicator(
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                    Color(0xFF340c64)),
-                                          )),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[],
-                                )
+                                          : CircularProgressIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                      Color(0xFF340c64)),
+                                            ),
+//
                               ],
                             ),
-                          ),
-                        ),
+                                ),
                       ),
                     ),
                   ]),
