@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "454630837533",
+    "firebase_url": "https://guessaline-33958.firebaseio.com",
+    "project_id": "guessaline-33958",
+    "storage_bucket": "guessaline-33958.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:454630837533:android:d6999075bba27a5292a5f4",
+        "android_client_info": {
+          "package_name": "com.gal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "454630837533-emgui9drjkg9bknfcq7845meafhlk3ol.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMPwXu-18uAXbAhu5iEhDGkke9LEUbyHM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "454630837533-emgui9drjkg9bknfcq7845meafhlk3ol.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
