@@ -106,7 +106,7 @@ class Home extends StatelessWidget {
               if (value == 0) {
                 jumpto(value, MediaQuery.of(context).size.width);
               } else if (value == 1) {
-                jumpto(value + 0.635, MediaQuery.of(context).size.width);
+                jumpto(value + 0.5, MediaQuery.of(context).size.width);
               } else if (value == 2) {
                 jumpto(value + 1.5, MediaQuery.of(context).size.width);
               }
@@ -118,10 +118,10 @@ class Home extends StatelessWidget {
             labelColor: Color(0xFF340c64),
             tabs: <Widget>[
               Tab(
-                text: 'New Release',
+                text: 'Line of the Day',
               ),
               Tab(
-                text: 'Line of the Day',
+                text: 'New Release',
               ),
               Tab(
                 text: 'Guesses',
@@ -133,8 +133,8 @@ class Home extends StatelessWidget {
           controller: controller,
           child: Column(
             children: <Widget>[
-              NewRelease(),
               LineOfDay(),
+              NewRelease(),
               Guess(),
             ],
           ),

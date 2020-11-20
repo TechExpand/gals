@@ -118,7 +118,10 @@ class ShowAllNewReleaseState extends State<ShowAllNewRelease> {
                                                             FontWeight.w800,
                                                         fontSize: 20,
                                                       fontFamily: 'sf-ui-display-black',
-                                                    )),
+                                                    ),
+                                                  softWrap: true,
+                                                  maxLines: 1,
+                                                ),
                                                 Text(
                                                   '${carousel[index].TrackName}',
                                                   style: TextStyle(
@@ -126,6 +129,8 @@ class ShowAllNewReleaseState extends State<ShowAllNewRelease> {
                                                       fontFamily: 'CircularStd-Black',
                                                       fontWeight:
                                                           FontWeight.bold),
+                                                  softWrap: true,
+                                                  maxLines: 1,
 
                                                 ),
 //                      Color(0xFF340c64)
@@ -422,22 +427,35 @@ class ShowAllNewReleaseState extends State<ShowAllNewRelease> {
                                                   height: 70,
                                                   child: Hero(
                                                     tag:random.GenRanNum() ,
-                                                    child: Image.network(
+                                                    child:  Image.network(
                                                       '${products[index].ImageUrl}',
+                                                      width:71,
                                                       fit: BoxFit.fill,
-                                                      loadingBuilder: (BuildContext
-                                                              context,
+                                                      loadingBuilder: (BuildContext context,
                                                           Widget child,
-                                                          ImageChunkEvent
-                                                              loadingProgress) {
+                                                          ImageChunkEvent loadingProgress) {
+                                                        if (loadingProgress == null)
+                                                          return child;
                                                         return Center(
-                                                            child: child);
+                                                          child: CircularProgressIndicator(
+                                                            valueColor: AlwaysStoppedAnimation<
+                                                                Color>(Color(
+                                                                0xFF553772),),
+                                                            value: loadingProgress
+                                                                .expectedTotalBytes != null
+                                                                ? loadingProgress
+                                                                .cumulativeBytesLoaded /
+                                                                loadingProgress
+                                                                    .expectedTotalBytes
+                                                                : null,
+                                                          ),
+                                                        );
                                                       },
                                                     ),
                                                   )),
                                             ),
                                             Container(
-                                              width: MediaQuery.of(context).size.width/2.3,
+                                              width: MediaQuery.of(context).size.width/2.38,
                                               padding:
                                                   EdgeInsets.only(left: 12),
                                               height: 100,
@@ -455,6 +473,8 @@ class ShowAllNewReleaseState extends State<ShowAllNewRelease> {
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold),
+                                                          softWrap: true,
+                                                          maxLines: 2,
                                                         ),
                                                       ],
                                                     ),
@@ -470,6 +490,8 @@ class ShowAllNewReleaseState extends State<ShowAllNewRelease> {
                                                             fontFamily: 'CircularStd-Book',
                                                             color:
                                                                 Colors.black54),
+                                                        softWrap: true,
+                                                        maxLines: 2,
                                                       ),
                                                     ),
                                                     Row(children: [
@@ -483,6 +505,8 @@ class ShowAllNewReleaseState extends State<ShowAllNewRelease> {
                                                             fontFamily: 'CircularStd-Book',
                                                             color:
                                                                 Colors.black54),
+                                                        softWrap: true,
+                                                        maxLines: 2,
                                                       )
                                                     ]),
                                                   ]),

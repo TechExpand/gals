@@ -56,19 +56,16 @@ class AdminMusicState extends State<AdminMusic> {
              products = snapshot.data.documents
                  .map((doc) => Guess.fromMap(doc.data, doc.documentID))
                  .toList();
-             return CustomScrollView(
-               slivers: <Widget>[
-
-                 SliverGrid(
+             return
+                 GridView.builder(
                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                      mainAxisSpacing: 2.5,
                      crossAxisSpacing: 3,
                      crossAxisCount: 2,
                    ),
-                   delegate: SliverChildBuilderDelegate((context, index) {
+                   itemBuilder: (context, index) {
                      print(products[index].id);
-                     return Expanded(
-                       child: Padding(
+                     return Padding(
                          padding: const EdgeInsets.all(8.0),
                          child: GridTile(
                            header: Padding(
@@ -229,14 +226,12 @@ class AdminMusicState extends State<AdminMusic> {
                              ),
                            ),
                          ),
-                       ),
-                     );
+                       );
                    },
-                       childCount: products.length  == null
+                       itemCount: products.length  == null
                            ? 0
-                           : products.length ),
-                 )
-               ],
+                           : products.length ,
+
              );
            }
             return   Center(

@@ -126,13 +126,12 @@ class _AudioAppState extends State<AudioApp> {
           elevation: 0,
         ),
         body: Center(
-            child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  mainAxisSize: MainAxisSize.min,
+            child:  Column(
+//                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(bottom:0.0),
+                      padding: const EdgeInsets.only(bottom:0.0, top:20),
                       child: Stack(
                         children: <Widget>[
                           Container(
@@ -157,16 +156,13 @@ class _AudioAppState extends State<AudioApp> {
                           Positioned.fill(
                               child:Container(
                                 margin: EdgeInsets.all(15),
-                                child: Hero(
-                                  tag: widget.name,
-                                       child: CircleAvatar(
+                                child: CircleAvatar(
                                     backgroundColor: Colors.white,
                                       radius: 20,
                                       backgroundImage: NetworkImage(widget.image.toString())
                                   ),
                                 ),
                               )
-                          )
                         ],
                       ),
                     ),
@@ -184,7 +180,7 @@ class _AudioAppState extends State<AudioApp> {
                 Material(child: _buildPlayer()),
 
         ],
-        ),
+
         ),
         ),
       ),

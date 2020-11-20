@@ -63,9 +63,20 @@ class AllTime extends StatelessWidget {
                        crossAxisAlignment: CrossAxisAlignment.start ,
                        children: <Widget>[
                          Text(
-                           '${leaderboard_data[index].Name}', overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
+                           '${leaderboard_data[index].Name}',
+                           style: TextStyle(
+                               fontFamily: 'CircularStd-Book',
+                               fontWeight:
+                               FontWeight
+                                   .bold),
+                           overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
                          Text(
-                           '${leaderboard_data[index].Email}', overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
+                           '${leaderboard_data[index].Email}',
+                           style: TextStyle(
+                               fontFamily: 'CircularStd-Book',
+                               color:
+                               Colors.black54),
+                           overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
                        ],
                      ),
                    ],
@@ -114,9 +125,20 @@ class AllTime extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start ,
                               children: <Widget>[
                                 Text(
-                                  '${leaderboard_data[index].Name}', overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
+                                  '${leaderboard_data[index].Name}',
+                                  style: TextStyle(
+                                      fontFamily: 'CircularStd-Book',
+                                      fontWeight:
+                                      FontWeight
+                                          .bold),
+                                  overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
                                 Text(
-                                  '${leaderboard_data[index].Email}', overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
+                                  '${leaderboard_data[index].Email}',
+                                  style: TextStyle(
+                                      fontFamily: 'CircularStd-Book',
+                                      color:
+                                      Colors.black54),
+                                  overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
                               ],
                             ),
                           ],
@@ -171,9 +193,20 @@ class AllTime extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start ,
                         children: <Widget>[
                           Text(
-                            '${leaderboard_data[index].Name}', overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
+                            '${leaderboard_data[index].Name}',
+                            style: TextStyle(
+                                fontFamily: 'CircularStd-Book',
+                                fontWeight:
+                                FontWeight
+                                    .bold),
+                            overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
                           Text(
-                            '${leaderboard_data[index].Email}', overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
+                            '${leaderboard_data[index].Email}',
+                            style: TextStyle(
+                                fontFamily: 'CircularStd-Book',
+                                color:
+                                Colors.black54),
+                            overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
                         ],
                       ),
                     ],
@@ -219,9 +252,20 @@ class AllTime extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start ,
                                 children: <Widget>[
                                   Text(
-                                    '${leaderboard_data[index].Name}', overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
+                                    '${leaderboard_data[index].Name}',
+                                    style: TextStyle(
+                                        fontFamily: 'CircularStd-Book',
+                                        fontWeight:
+                                        FontWeight
+                                            .bold),
+                                    overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
                                   Text(
-                                    '${leaderboard_data[index].Email}', overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
+                                    '${leaderboard_data[index].Email}',
+                                    style: TextStyle(
+                                        fontFamily: 'CircularStd-Book',
+                                        color:
+                                        Colors.black54),
+                                    overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
                                 ],
                               ),
                             ],
@@ -265,9 +309,20 @@ class AllTime extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start ,
                               children: <Widget>[
                                 Text(
-                                  '${leaderboard_data[index].Name}', overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
+                                  '${leaderboard_data[index].Name}',
+                                  style: TextStyle(
+                                      fontFamily: 'CircularStd-Book',
+                                      fontWeight:
+                                      FontWeight
+                                          .bold),
+                                  overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
                                 Text(
-                                  '${leaderboard_data[index].Email}', overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
+                                  '${leaderboard_data[index].Email}',
+                                  style: TextStyle(
+                                      fontFamily: 'CircularStd-Book',
+                                      color:
+                                      Colors.black54),
+                                  overflow:TextOverflow.fade, softWrap: true,maxLines: 1,),
                               ],
                             ),
                           ],
@@ -296,7 +351,7 @@ class AllTime extends StatelessWidget {
             
                     }else{
                       return Center(
-                        child: CircularProgressIndicator(valueColor:  AlwaysStoppedAnimation<Color>(Colors.white),),
+                        child: CircularProgressIndicator(valueColor:  AlwaysStoppedAnimation<Color>(Color(0xFF340c64)),),
                       );
                     }
       }

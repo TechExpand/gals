@@ -47,16 +47,17 @@ class _CardPageState extends State<CardPage> {
             return Material(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 20.0),
-                child: SingleChildScrollView(
-                  child: Column(children: [
+                child: Column(
+//                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
                     Material(
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(7),
                         bottomRight: Radius.circular(7),
                       ),
                       elevation: 5,
-                      child: Container(
-                        child: Container(
+                      child:  Container(
                           width: MediaQuery.of(context).size.width,
                           height: 220,
                           child: Column(
@@ -92,8 +93,7 @@ class _CardPageState extends State<CardPage> {
                                 ),
 //
                               ]),
-                        ),
-                        height: 220,
+
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(7),
@@ -108,6 +108,7 @@ class _CardPageState extends State<CardPage> {
                       child:  Consumer<Network>(
                             builder: (context, webservices_consumer, child) =>
                                 Container(
+                                  alignment: Alignment.center,
                                   width: MediaQuery.of(context).size.width,
                                   margin: EdgeInsets.only(top:50),
                                   child: Column(
@@ -149,74 +150,88 @@ class _CardPageState extends State<CardPage> {
                                       ),
                                     ),
                                   ),
+
                                    webservices_consumer.login_state ==
                                               false
-                                          ? Padding(
-                                            padding: const EdgeInsets.only(left:30.0),
+                                          ?  Align(
+                                     alignment: Alignment.center,
                                             child: RaisedButton(
-                                                onPressed: () async {
-                                                  if (form_key.currentState
-                                                      .validate()) {
-                                                    Charge charge = Charge()
-                                                      ..amount = int.parse(amount+'00')
-                                                      ..reference = _getReference()
-                                                      ..email = music.useremail;
-                                                    CheckoutResponse response =
-                                                        await PaystackPlugin
-                                                            .checkout(
-                                                      context,
-                                                      method: CheckoutMethod.card,
-                                                      charge: charge,
-                                                    );
-                                                    if (response.status) {
-                                                      return webservices_consumer
-                                                          .UpdateProfileWalletBuy(
-                                                        context: context,
-                                                        wallet: int.parse(amount) +
-                                                            int.parse(snapshot
-                                                                .data['Wallet']),
-                                                        id: snapshot.data['userid'],
+                                                  onPressed: () async {
+                                                    if (form_key.currentState
+                                                        .validate()) {
+                                                      Charge charge = Charge()
+                                                        ..amount = int.parse(amount+'00')
+                                                        ..reference = _getReference()
+                                                        ..email = music.useremail;
+                                                      CheckoutResponse response =
+                                                          await PaystackPlugin
+                                                              .checkout(
+                                                        context,
+                                                        method: CheckoutMethod.card,
+                                                        charge: charge,
                                                       );
+                                                      if (response.status) {
+                                                        return webservices_consumer
+                                                            .UpdateProfileWalletBuy(
+                                                          context: context,
+                                                          wallet: int.parse(amount) +
+                                                              int.parse(snapshot
+                                                                  .data['Wallet']),
+                                                          id: snapshot.data['userid'],
+                                                        );
+                                                      }
                                                     }
-                                                  }
-                                                },
-                                                color: Color(0xFF340c64),
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(8)),
-                                                padding: EdgeInsets.all(0.0),
-                                                child: Ink(
-                                                  decoration: BoxDecoration(
-                                                      color: Color(0xFF340c64),
+                                                  },
+                                                  color: Color(0xFF340c64),
+                                                  shape: RoundedRectangleBorder(
                                                       borderRadius:
-                                                          BorderRadius.circular(8)),
-                                                  child: Container(
-                                                    constraints: BoxConstraints(
-                                                        maxWidth: 200.0,
-                                                        minHeight: 50.0),
-                                                    alignment: Alignment.center,
-                                                    child: Text(
-                                                      "Fund My Wallet!",
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(
-                                                          color: Colors.white),
+                                                          BorderRadius.only(
+                                                              topLeft:Radius.circular(8),
+                                                            topRight: Radius.circular(25),
+                                                            bottomLeft: Radius.circular(25),
+                                                            bottomRight: Radius.circular(8),
+                                                          )),
+                                                  padding: EdgeInsets.all(0.0),
+                                                  child: Ink(
+                                                    decoration: BoxDecoration(
+                                                        color: Color(0xFF340c64),
+                                                        borderRadius:
+                                                        BorderRadius.only(
+                                                          topLeft:Radius.circular(8),
+                                                          topRight: Radius.circular(25),
+                                                          bottomLeft: Radius.circular(25),
+                                                          bottomRight: Radius.circular(8),
+                                                        )),
+                                                    child: Container(
+                                                      constraints: BoxConstraints(
+                                                          maxWidth: 200.0,
+                                                          minHeight: 50.0),
+                                                      alignment: Alignment.center,
+                                                      child: Text(
+                                                        "Fund My Wallet!",
+                                                        textAlign: TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: Colors.white),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
                                           )
-                                          : CircularProgressIndicator(
-                                              valueColor:
-                                                  AlwaysStoppedAnimation<Color>(
-                                                      Color(0xFF340c64)),
-                                            ),
+                                          : Align(
+                                     alignment: Alignment.center,
+                                            child: CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<Color>(
+                                                        Color(0xFF340c64)),
+                                              ),
+                                          ),
 //
                               ],
                             ),
                                 ),
                       ),
                     ),
-                  ]),
+                  ]
                 ),
               ),
             );

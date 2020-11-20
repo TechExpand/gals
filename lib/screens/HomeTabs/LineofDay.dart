@@ -62,7 +62,7 @@ class LineOfDayState extends State<LineOfDay> {
                 child: Column(
                   children: <Widget>[
                     StreamBuilder(
-                        stream: music.getCarouselStream1(),
+                        stream: music.getCarouselStream(),
                         builder:
                             (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                           if (snapshot.hasData) {
@@ -89,16 +89,13 @@ class LineOfDayState extends State<LineOfDay> {
                                                 .of(context)
                                                 .size
                                                 .width,
-                                            child: Hero(
-                                              tag: random.GenRanNum(),
-                                              child: Image.network(
+                                            child: Image.network(
                                                 '${carousel[index].image}',
                                                 fit: BoxFit.fill,
-                                              ),
-                                            ),
+                                              ),                                            ),
                                           ),
                                         ),
-                                      ),
+
 
                                       Center(
                                         child: Container(
@@ -128,7 +125,10 @@ class LineOfDayState extends State<LineOfDay> {
                                                       FontWeight.w800,
                                                       fontSize: 20,
                                                       fontFamily: 'sf-ui-display-black',
-                                                    )),
+                                                    ),
+                                                  softWrap: true,
+                                                  maxLines: 1,
+                                                ),
                                                 Text(
                                                   '${carousel[index]
                                                       .TrackName}',
@@ -137,6 +137,8 @@ class LineOfDayState extends State<LineOfDay> {
                                                       fontFamily: 'CircularStd-Black',
                                                       fontWeight:
                                                       FontWeight.bold),
+                                                  softWrap: true,
+                                                  maxLines: 1,
                                                 ),
 //                      Color(0xFF340c64)
                                                 Container(
@@ -227,14 +229,10 @@ class LineOfDayState extends State<LineOfDay> {
                                                             animation,
                                                             secondaryAnimation) {
                                                           return AudioApp(
-                                                            kUrl: carousel[index]
-                                                                .file,
-                                                            image: carousel[index]
-                                                                .image,
-                                                            name: carousel[index]
-                                                                .AlbumName,
-                                                            title: carousel[index]
-                                                                .TrackName,
+                                                            kUrl: carousel[index].file,
+                                                            image: carousel[index].image,
+                                                            name: carousel[index].AlbumName,
+                                                            title: carousel[index].TrackName,
                                                           );
                                                         },
                                                         transitionsBuilder:
@@ -404,10 +402,10 @@ class LineOfDayState extends State<LineOfDay> {
                                                           animation,
                                                           secondaryAnimation) {
                                                         return AudioApp(
-                                                          kUrl: products[index]
-                                                              .MusicUrl,
-                                                          image: products[index]
-                                                              .ImageUrl,
+                                                          kUrl: products[index].MusicUrl,
+                                                          image: products[index].ImageUrl,
+                                                          name: products[index].AlbumName,
+                                                          title: products[index].TrackName,
                                                         );
                                                       },
                                                       transitionsBuilder:
@@ -460,6 +458,7 @@ class LineOfDayState extends State<LineOfDay> {
                                                 tag: random.GenRanNum(),
                                                 child: Image.network(
                                                   products[index].ImageUrl,
+                                                  width:71,
                                                   fit: BoxFit.fill,
                                                   loadingBuilder: (
                                                       BuildContext context,
@@ -489,7 +488,7 @@ class LineOfDayState extends State<LineOfDay> {
                                           ),
                                           Container(
                                             color: Colors.white,
-                                            width: MediaQuery.of(context).size.width/2.3,
+                                            width: MediaQuery.of(context).size.width/2.38,
                                             padding: EdgeInsets.only(left: 12),
                                             height: 100,
                                             child: Column(
@@ -508,6 +507,8 @@ class LineOfDayState extends State<LineOfDay> {
                                                             fontWeight:
                                                             FontWeight
                                                                 .bold),
+                                                        softWrap: true,
+                                                        maxLines: 2,
                                                       ),
                                                     ],
                                                   ),
@@ -525,6 +526,8 @@ class LineOfDayState extends State<LineOfDay> {
                                                           fontFamily: 'CircularStd-Book',
                                                           color:
                                                           Colors.black54),
+                                                      softWrap: true,
+                                                      maxLines: 2,
                                                     ),
                                                   ),
                                                   Row(children: [
@@ -540,6 +543,8 @@ class LineOfDayState extends State<LineOfDay> {
                                                           fontFamily: 'CircularStd-Book',
                                                           color:
                                                           Colors.black54),
+                                                      softWrap: true,
+                                                      maxLines: 2,
                                                     )
                                                   ]),
                                                 ]),
@@ -611,12 +616,10 @@ class LineOfDayState extends State<LineOfDay> {
                                                                                   animation,
                                                                                   secondaryAnimation) {
                                                                                 return AudioApp(
-                                                                                  kUrl:
-                                                                                  products[index]
-                                                                                      .MusicUrl,
-                                                                                  image:
-                                                                                  products[index]
-                                                                                      .ImageUrl,
+                                                                                  kUrl: products[index].MusicUrl,
+                                                                                  image: products[index].ImageUrl,
+                                                                                  name: products[index].AlbumName,
+                                                                                  title: products[index].TrackName,
                                                                                 );
                                                                               },
                                                                               transitionsBuilder: (

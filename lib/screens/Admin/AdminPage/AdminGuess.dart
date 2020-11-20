@@ -51,17 +51,14 @@ class AdminGuessState extends State<AdminGuess> {
               products = snapshot.data.documents
                   .map((doc) => Guess.fromMap(doc.data, doc.documentID))
                   .toList();
-            return CustomScrollView(
-                slivers: <Widget>[
-                  SliverGrid(
+            return  GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      mainAxisSpacing: 2.5,
-                      crossAxisSpacing: 3,
+                      mainAxisSpacing: 2,
+                      crossAxisSpacing: 2,
                       crossAxisCount: 2,
                     ),
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      return Expanded(
-                        child: Padding(
+                    itemBuilder: (context, index) {
+                      return  Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: GridTile(
                             header: Padding(
@@ -245,15 +242,12 @@ class AdminGuessState extends State<AdminGuess> {
                               ),
                             ),
                           ),
-                        ),
-                      );
+                        );
                     },
-                        childCount: products.length  == null
+                        itemCount: products.length  == null
                             ? 0
-                            : products.length ),
-                  )
-                ],
-              );
+                            : products.length ,
+                  );
                }
 
                return Center(

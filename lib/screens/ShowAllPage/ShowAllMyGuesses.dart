@@ -57,7 +57,7 @@ class ShowAllMyGuessState extends State<ShowAllMyGuess> {
                   child: Column(
                     children: <Widget>[
                       StreamBuilder(
-                          stream: music.getCarouselStream1(),
+                          stream: music.getCarouselStream(),
                           builder:
                               (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                             if (snapshot.hasData) {
@@ -115,7 +115,10 @@ class ShowAllMyGuessState extends State<ShowAllMyGuess> {
                                                         FontWeight.w800,
                                                         fontSize: 20,
                                                       fontFamily: 'sf-ui-display-black',
-                                                    )),
+                                                    ),
+                                                  softWrap: true,
+                                                  maxLines: 1,
+                                                ),
                                                 Text(
                                                   '${carousel[index].TrackName}',
                                                   style: TextStyle(
@@ -123,6 +126,8 @@ class ShowAllMyGuessState extends State<ShowAllMyGuess> {
                                                       fontFamily: 'CircularStd-Black',
                                                       fontWeight:
                                                       FontWeight.bold),
+                                                  softWrap: true,
+                                                  maxLines: 1,
                                                 ),
 //                      Color(0xFF340c64)
                                                 Container(
@@ -336,7 +341,11 @@ class ShowAllMyGuessState extends State<ShowAllMyGuess> {
                                   .toList();
                               if(products.length == 0){
                                 return ListTile(
-                                  title: Center(child: Text('YOU DONOT HAVE ANY GUESSES')),
+                                  title: Center(child: Text('YOU DONOT HAVE ANY GUESSES',style: TextStyle(
+                                      fontFamily: 'CircularStd-Book',
+                                      fontWeight:
+                                      FontWeight
+                                          .bold),)),
                                 );
                               }
                               else {
@@ -417,6 +426,7 @@ class ShowAllMyGuessState extends State<ShowAllMyGuess> {
                                                     tag: random.GenRanNum(),
                                                     child: Image.network(
                                                       '${products[index].ImageUrl}',
+                                                      width:71,
                                                       fit: BoxFit.fill,
                                                       loadingBuilder: (BuildContext context,
                                                           Widget child,
@@ -443,7 +453,7 @@ class ShowAllMyGuessState extends State<ShowAllMyGuess> {
                                                 ),
                                               ),
                                               Container(
-                                                width: MediaQuery.of(context).size.width/2.3,
+                                                width: MediaQuery.of(context).size.width/2.38,
                                                 padding: EdgeInsets.only(left: 12),
                                                 height: 100,
                                                 child: Column(
@@ -459,7 +469,10 @@ class ShowAllMyGuessState extends State<ShowAllMyGuess> {
                                                                 fontWeight: FontWeight
                                                                     .bold),
                                                             overflow: TextOverflow
-                                                                .fade,),
+                                                                .fade,
+                                                            softWrap: true,
+                                                            maxLines: 2,
+                                                          ),
 
                                                         ],
                                                       ),
@@ -472,7 +485,10 @@ class ShowAllMyGuessState extends State<ShowAllMyGuess> {
                                                               fontFamily: 'CircularStd-Book',
                                                               color: Colors.black54),
                                                           overflow: TextOverflow
-                                                              .fade,),
+                                                              .fade,
+                                                          softWrap: true,
+                                                          maxLines: 2,
+                                                        ),
                                                       ),
 
                                                       Row(
@@ -485,7 +501,10 @@ class ShowAllMyGuessState extends State<ShowAllMyGuess> {
                                                                   fontFamily: 'CircularStd-Book',
                                                                   color: Colors.black54),
                                                               overflow: TextOverflow
-                                                                  .fade,)
+                                                                  .fade,
+                                                              softWrap: true,
+                                                              maxLines: 2,
+                                                            )
                                                           ]
 
                                                       ),

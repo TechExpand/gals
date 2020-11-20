@@ -19,12 +19,8 @@ class Network extends ChangeNotifier {
   Firestore.instance.collection('NewRelease');
   final CollectionReference leaderboard_collection =
   Firestore.instance.collection('LeaderBoard');
-  final CollectionReference carouselmusic_collection =
-  Firestore.instance.collection('CarouselMusic');
   final CollectionReference carouselmusic_collection1 =
   Firestore.instance.collection('CarouselMusic1');
-  final CollectionReference carouselmusic_collection2 =
-  Firestore.instance.collection('CarouselMusic2');
   var uploadedFileURL;
   var login_state = false;
   var login_state_second = false;
@@ -385,105 +381,8 @@ class Network extends ChangeNotifier {
     }
   }
 
-  Future PostSlidder3({MusicLike,
-    context,
-    music,
-    image,
-    AlbumName,
-    TrackName,
-    MusicToken,
-    MusicLength,
-    id}) async {
-    var webservices = Provider.of<Dialogs>(context, listen: false);
-    try {
-      StorageReference storageReferenceImage = FirebaseStorage.instance
-          .ref()
-          .child('music/${Path.basename(image.path)}}');
 
-      StorageUploadTask uploadTask = storageReferenceImage.putFile(image);
-      await uploadTask.onComplete;
-      await storageReferenceImage.getDownloadURL().then((imageurl) {
-        imageurl_data = imageurl;
-        StorageReference storageReferenceMusic = FirebaseStorage.instance
-            .ref()
-            .child('music/${Path.basename(music.path)}}');
-        StorageUploadTask uploadTask = storageReferenceMusic.putFile(music);
-        uploadTask.events.listen((event) {
-          progress = event.snapshot.bytesTransferred.toDouble() /
-              event.snapshot.totalByteCount.toDouble();
-        });
-        storageReferenceMusic.getDownloadURL().then((musicurl) {
-          musicurl_data = musicurl;
-        });
-      });
-      await uploadTask.onComplete.then((value) {
-        databaseReference.collection("CarouselMusic2").document(id).setData({
-          'AlbumName': AlbumName.toString(),
-          'TrackName': TrackName.toString(),
-          'ImageUrl': imageurl_data.toString(),
-          'MusicUrl': musicurl_data.toString(),
-          'Token': MusicToken.toString(),
-          'time': MusicLength.toString(),
-          'rate': MusicLike.toString(),
-        });
-      });
-      Login_SetState();
-      notifyListeners();
-    } catch (e) {
-      Login_SetState();
-      webservices.showSignLoginError(context, e.message);
-    }
-  }
 
-  Future PostSlidder2({context,
-    music,
-    image,
-    AlbumName,
-    TrackName,
-    MusicToken,
-    MusicLength,
-    MusicLike,
-    id}) async {
-    var webservices = Provider.of<Dialogs>(context, listen: false);
-    try {
-      StorageReference storageReferenceImage = FirebaseStorage.instance
-          .ref()
-          .child('music/${Path.basename(image.path)}}');
-
-      StorageUploadTask uploadTask = storageReferenceImage.putFile(image);
-      await uploadTask.onComplete;
-      await storageReferenceImage.getDownloadURL().then((imageurl) {
-        imageurl_data = imageurl;
-        StorageReference storageReferenceMusic = FirebaseStorage.instance
-            .ref()
-            .child('music/${Path.basename(music.path)}}');
-        StorageUploadTask uploadTask = storageReferenceMusic.putFile(music);
-        uploadTask.events.listen((event) {
-          progress = event.snapshot.bytesTransferred.toDouble() /
-              event.snapshot.totalByteCount.toDouble();
-        });
-        storageReferenceMusic.getDownloadURL().then((musicurl) {
-          musicurl_data = musicurl;
-        });
-      });
-      await uploadTask.onComplete.then((value) {
-        databaseReference.collection("CarouselMusic1").document(id).setData({
-          'AlbumName': AlbumName.toString(),
-          'TrackName': TrackName.toString(),
-          'ImageUrl': imageurl_data.toString(),
-          'MusicUrl': musicurl_data.toString(),
-          'Token': MusicToken.toString(),
-          'time': MusicLength.toString(),
-          'rate': MusicLike.toString(),
-        });
-      });
-      Login_SetState();
-      notifyListeners();
-    } catch (e) {
-      Login_SetState();
-      webservices.showSignLoginError(context, e.message);
-    }
-  }
 
   Future PostSlidder1({context,
     music,
@@ -622,6 +521,26 @@ class Network extends ChangeNotifier {
           'MusicToken': MusicToken.toString(),
           'MusicLength': MusicLength.toString(),
         });
+      }).then((value){
+        Login_SetState();
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation,
+                secondaryAnimation) {
+              return UploadQuestion(
+                guess_id:id,
+              );
+            },
+            transitionsBuilder: (context, animation,
+                secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            },
+          ),
+        );
       });
       notifyListeners();
     } catch (e) {
@@ -641,6 +560,7 @@ class Network extends ChangeNotifier {
         databaseReference.collection("LeaderBoard").document(userid).updateData(
           {
             'points': point,
+            'Date': date,
           },
         ).then((value) {
           databaseReference.collection("users").document(userid).updateData({
@@ -707,7 +627,7 @@ class Network extends ChangeNotifier {
     return userQuery;
   }*/
 
-  Stream<QuerySnapshot> getQuestionStream(id) {
+  Stream<QuerySnapshot> getQuestionStream({id}) {
     var question_collection = Firestore.instance
         .collection('Question')
         .where('Lineofday', isEqualTo: id);
@@ -723,16 +643,9 @@ class Network extends ChangeNotifier {
 
 
   Stream<QuerySnapshot> getCarouselStream() {
-    return carouselmusic_collection.snapshots();
-  }
-
-  Stream<QuerySnapshot> getCarouselStream1() {
     return carouselmusic_collection1.snapshots();
   }
 
-  Stream<QuerySnapshot> getCarouselStream2() {
-    return carouselmusic_collection2.snapshots();
-  }
 
   Stream<QuerySnapshot> getLeaderBoardStream() {
     // var d = leaderboard_collection.orderBy('Token');

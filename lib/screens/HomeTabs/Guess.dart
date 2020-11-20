@@ -29,22 +29,6 @@ class GuessState extends State<Guess> {
     List<Music> products;
     var webservies = Provider.of<Network>(context);
     List<LeaderBoard> leaderboard;
-    List<Carousel> carousel;
-
-    List cardList = [
-      Text(''),
-      Text(''),
-      Text(''),
-    ];
-
-    List<T> map<T>(List list, Function handler) {
-      List<T> result = [];
-      for (var i = 0; i < list.length; i++) {
-        result.add(handler(i, list[i]));
-      }
-      return result;
-    }
-
     var music = Provider.of<Network>(context);
      var random = Provider.of<RandomNum>(context, listen: false);
     var dialog = Provider.of<Dialogs>(context);
@@ -59,250 +43,6 @@ class GuessState extends State<Guess> {
                 var userDocument = snapshots.data;
                 return SingleChildScrollView(
                     child: Column(children: <Widget>[
-                  StreamBuilder(
-                      stream: music.getCarouselStream2(),
-                      builder:
-                          (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.hasData) {
-                          carousel = snapshot.data.documents
-                              .map((doc) =>
-                                  Carousel.fromMap(doc.data, doc.documentID))
-                              .toList();
-                          return CarouselSlider.builder(
-                            itemCount:  carousel == null ? 0 : carousel
-                              .length >= 4 ? 4 : carousel.length,
-                            itemBuilder: (context, index) {
-                              return Stack(
-                                children: <Widget>[
-                                  Material(
-                                    elevation: 5,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(3),
-                                      child: Container(
-                                        height: 450,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: Hero(
-                                          tag: random.GenRanNum(),
-                                              child: Image.network(
-                                            '${carousel[index].image}',
-                                            fit: BoxFit.fill,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Center(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: Colors.white70,
-                                      ),
-                                      margin: EdgeInsets.only(
-                                          top: MediaQuery.of(context).size.height /
-                                              4),
-                                      child: ListTile(
-                                        title: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Text(
-                                              '${carousel[index].AlbumName}',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w800,
-                                                  fontSize: 20,
-                                                fontFamily: 'sf-ui-display-black',
-                                              ),
-                                              overflow: TextOverflow.fade,
-                                            ),
-                                            Text(
-                                              '${carousel[index].TrackName}',
-                                              style: TextStyle(
-                                                  color: Colors.black54,
-                                                  fontWeight: FontWeight.bold,
-                                                fontFamily: 'CircularStd-Black',
-                                              ),
-                                              overflow: TextOverflow.fade,
-                                            ),
-//                      Color(0xFF340c64)
-                                            Container(
-                                              height: 30,
-                                              child: Row(
-                                                children: <Widget>[
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 6.0),
-                                                    child: SvgPicture.asset(
-                                                        'assets/images/heart.svg'),
-                                                  ),
-                                                  Text(
-                                                    '${carousel[index].rate}k',
-                                                    overflow:
-                                                        TextOverflow.fade,
-                                                    style: TextStyle(
-                                                      color: Color(0xFF340c64),
-                                                      fontFamily: 'CircularStd-Book',
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 2.0),
-                                                    child: SvgPicture.asset(
-                                                        'assets/images/Bell.svg'),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 2.0),
-                                                    child: Text(
-                                                      '${carousel[index].time}min',
-                                                      overflow:
-                                                          TextOverflow.fade,
-                                                      style: TextStyle(
-                                                          fontFamily: 'CircularStd-Book',
-                                                          fontSize: 15,
-                                                          color: Colors.black54,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              left: 4.0),
-                                                      child: SvgPicture.asset(
-                                                          'assets/images/token.svg')),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 3.0),
-                                                    child: Text(
-                                                      '${carousel[index].Token} Token',
-                                                      overflow:
-                                                          TextOverflow.fade,
-                                                      style: TextStyle(
-                                                          fontFamily: 'CircularStd-Book',
-                                                          color:
-                                                              Color(0xFF340c64),
-                                                          fontSize: 13,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        trailing: InkWell(
-                                          onTap: () {
-                                            if (int.parse(
-                                                    userDocument['Token']) >=
-                                                int.parse(carousel[index]
-                                                    .Token)) {
-                                              Navigator.push(
-                                                  context,
-                                                  PageRouteBuilder(
-                                                    pageBuilder: (context,
-                                                        animation,
-                                                        secondaryAnimation) {
-                                                      return AudioApp(
-                                                        kUrl: carousel[index].file,
-                                                        image: carousel[index].image,
-                                                        name: carousel[index].AlbumName,
-                                                        title: carousel[index].TrackName,
-                                                      );
-                                                    },
-                                                    transitionsBuilder:
-                                                        (context,
-                                                            animation,
-                                                            secondaryAnimation,
-                                                            child) {
-                                                      return FadeTransition(
-                                                        opacity: animation,
-                                                        child: child,
-                                                      );
-                                                    },
-                                                  )).then((value) {
-                                                music.UpdateProfileTokenPlay(
-                                                  context: context,
-                                                  token: int.parse(userDocument[
-                                                          'Token']) -
-                                                      int.parse(carousel[index]
-                                                          .Token),
-                                                  id: userDocument['userid'],
-                                                );
-                                              });
-                                            } else {
-                                              dialog.buyTokens(
-                                                context,
-                                                music.userid,
-                                                userDocument['Token'],
-                                                userDocument['Wallet'],
-                                              );
-                                            }
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 20.0, right: 0, left: 0),
-                                            child: Image.asset(
-                                                'assets/images/playbig.png', width: 30,height:30),
-                                          ),
-                                        ),
-                                      ),
-                                      height: 85,
-                                      width: MediaQuery.of(context).size.width -
-                                          30,
-                                    ),
-                                  )
-                                ],
-                              );
-                            },
-                            options: CarouselOptions(
-                              autoPlayInterval: Duration(seconds: 8),
-                              autoPlay: true,
-                              aspectRatio: 1.3,
-                              enlargeCenterPage: false,
-                              viewportFraction: 1,
-                              onPageChanged: (index, reason) {
-                                setState(() {
-                                  _currentIndex = index;
-                                });
-                              },
-                            ),
-                          );
-                        }
-                        return Center(
-                          child: CircularProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
-                          ),
-                        );
-                      }),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: map<Widget>(cardList, (index, url) {
-                      return Container(
-                        width: 10.0,
-                        height: 10.0,
-                        margin: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 2.0),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _currentIndex == index
-                              ? Color(0xFF340c64)
-                              : Colors.grey,
-                        ),
-                      );
-                    }),
-                  ),
                   Padding(
                     padding:
                         const EdgeInsets.only(left: 8.0, right: 8, top: 16),
@@ -352,7 +92,11 @@ class GuessState extends State<Guess> {
                           if (products.length == 0) {
                             return ListTile(
                               title: Center(
-                                  child: Text('YOU DONOT HAVE ANY GUESSES')),
+                                  child: Text('YOU DONOT HAVE ANY GUESSES',style: TextStyle(
+                                      fontFamily: 'CircularStd-Book',
+                                      fontWeight:
+                                      FontWeight
+                                          .bold),)),
                             );
                           } else {
                             return ListView.builder(
@@ -383,10 +127,10 @@ class GuessState extends State<Guess> {
                                                           animation,
                                                           secondaryAnimation) {
                                                         return AudioApp(
-                                                          kUrl: products[index]
-                                                              .MusicUrl,
-                                                          image: products[index]
-                                                              .ImageUrl,
+                                                          kUrl: products[index].MusicUrl,
+                                                          image: products[index].ImageUrl,
+                                                          name: products[index].AlbumName,
+                                                          title: products[index].TrackName,
                                                         );
                                                       },
                                                       transitionsBuilder:
@@ -431,10 +175,9 @@ class GuessState extends State<Guess> {
                                                 BorderRadius.circular(3),
                                             child: Container(
                                               height: 70,
-                                              child: Hero(
-                                                  tag:random.GenRanNum(),    
-                                                  child: Image.network(
+                                              child:  Image.network(
                                                   products[index].ImageUrl,
+                                                  width:71,
                                                   fit: BoxFit.fill,
                                                   loadingBuilder:
                                                       (BuildContext context,
@@ -465,9 +208,9 @@ class GuessState extends State<Guess> {
                                                 ),
                                               ),
                                             ),
-                                          ),
+
                                           Container(
-                                            width: MediaQuery.of(context).size.width/2.3,
+                                            width: MediaQuery.of(context).size.width/2.38,
                                             padding: EdgeInsets.only(left: 12),
                                             height: 100,
                                             child: Column(
@@ -486,6 +229,8 @@ class GuessState extends State<Guess> {
                                                         ),
                                                         overflow: TextOverflow
                                                             .fade,
+                                                        softWrap: true,
+                                                        maxLines: 2,
                                                       ),
                                                     ],
                                                   ),
@@ -502,6 +247,8 @@ class GuessState extends State<Guess> {
                                                               Colors.black54),
                                                       overflow:
                                                           TextOverflow.fade,
+                                                      softWrap: true,
+                                                      maxLines: 2,
                                                     ),
                                                   ),
                                                   Row(children: [
@@ -516,6 +263,8 @@ class GuessState extends State<Guess> {
                                                               Colors.black54),
                                                       overflow:
                                                           TextOverflow.fade,
+                                                      softWrap: true,
+                                                      maxLines: 2,
                                                     )
                                                   ]),
                                                 ]),
@@ -619,7 +368,8 @@ class GuessState extends State<Guess> {
                                 ListView.builder(
                                     physics: ScrollPhysics(),
                                     shrinkWrap: true,
-                                    itemCount: leaderboard_data.length==null?0:7,
+                                    itemCount: leaderboard_data == null ? 0 : leaderboard_data
+                                        .length >= 7 ? 7 : leaderboard_data.length,
                                     itemBuilder: (context, index) {
                                       if (index == 0) {
                                         return ListTile(

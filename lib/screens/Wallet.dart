@@ -133,8 +133,9 @@ class Wallet extends StatelessWidget {
                         child:Text(''),
                         color:Colors.black26,
                       ),
+        Spacer(),
         music.login_state==false?Container(
-                         margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/1.5),
+                         margin: EdgeInsets.only(bottom: 20),
                         height: 40,
                         width: 140,
                           decoration: BoxDecoration(
@@ -180,7 +181,7 @@ class Wallet extends StatelessWidget {
 
                           )
                         ):Container(
-            margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/1.5),
+            margin: EdgeInsets.only(bottom: 20),
             child: CircularProgressIndicator(valueColor:  AlwaysStoppedAnimation<Color>( Color(0xFF340c64)))),
                   ]
                 ),

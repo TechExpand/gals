@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:gal/Network/Network.dart';
 import 'package:gal/screens/Admin/Add/UploadQuestion.dart';
 import 'package:gal/screens/HomeTabs/Home.dart';
+import 'package:gal/utils/RandomNum.dart';
 import 'package:path/path.dart' as Path;
 import 'package:gal/utils/file_picker.dart';
 import 'package:provider/provider.dart';
@@ -16,13 +17,9 @@ class UploadGuess extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var webservices = Provider.of<Network>(context);
+    var randomNumberService = Provider.of<RandomNum>(context);
 var upload = Provider.of<FilePickers>(context, listen:false);
  final form_key = GlobalKey<FormState>();
-const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-Random _rnd = Random();
-
-String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
-    length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
  var albumname;
  var tracktitle;
  var musictoken;
@@ -260,11 +257,10 @@ String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
                           ? Center(
                               child: Text('No Audio Selected'),
                             )
-                          : Expanded(
-                                      child: Text(
+                          : Text(
                                 Provider.of<FilePickers>(context, listen:true).file.toString(),
                                 style:TextStyle( color: Colors.black), textAlign: TextAlign.center,
-                              ),
+
                           ),
                     ),  
                      Padding(
@@ -306,6 +302,7 @@ String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
                            onPressed: (){
                              if(form_key.currentState.validate()){
                          webservices_consumer.Login_SetState();
+                         randomNumberService.getRandomString(20);
                          webservices.PostGuess(
                            context: context,
                             image: upload.image,
@@ -314,16 +311,15 @@ String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
                             MusicLength: musiclength,
                             MusicToken: musictoken,
                             TrackName: tracktitle,
-                            id: getRandomString(20),
+                            id: randomNumberService.random_num,
                          ).then((value){
-                           webservices_consumer.Login_SetState();
                            Navigator.push(
                              context,
                              PageRouteBuilder(
                                pageBuilder: (context, animation,
                                    secondaryAnimation) {
                                  return UploadQuestion(
-                                   guess_id:getRandomString(20),
+                                   guess_id:randomNumberService.random_num,
                                  );
                                },
                                transitionsBuilder: (context, animation,

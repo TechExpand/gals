@@ -57,18 +57,14 @@ class AdminSlidder1State extends State<AdminSlidder1> {
                   products = snapshot.data.documents
                       .map((doc) => Carousel.fromMap(doc.data, doc.documentID))
                       .toList();
-                  return  CustomScrollView(
-                    slivers: <Widget>[
-
-                      SliverGrid(
+                  return  GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           mainAxisSpacing: 2.5,
                           crossAxisSpacing: 3,
                           crossAxisCount: 2,
                         ),
-                        delegate: SliverChildBuilderDelegate((context, index) {
-                          return Expanded(
-                            child: Padding(
+                        itemBuilder: (context, index) {
+                          return Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: GridTile(
                                 header: Padding(
@@ -229,14 +225,12 @@ class AdminSlidder1State extends State<AdminSlidder1> {
                                   ),
                                 ),
                               ),
-                            ),
-                          );
+                            );
                         },
-                            childCount: products.length  == null
+                            itemCount: products.length  == null
                                 ? 0
-                                : products.length ),
-                      )
-                    ],
+                                : products.length ,
+
                   );
                 }
           return  Center(

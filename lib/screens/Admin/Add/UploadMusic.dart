@@ -252,12 +252,11 @@ var upload = Provider.of<FilePickers>(context, listen:false);
                           ? Center(
                               child: Text('No Audio Selected'),
                             )
-                          : Expanded(
-                                      child: Text(
+                          :  Text(
                                 Provider.of<FilePickers>(context, listen:true).file.toString(),
                                 style:TextStyle( color: Colors.black), textAlign: TextAlign.center,
                               ),
-                          ),
+
                     ),  
                      Padding(
                         padding:  EdgeInsets.only(top: 30, bottom: 0),

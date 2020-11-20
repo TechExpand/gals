@@ -61,7 +61,7 @@ class ShowAllLineOfDayState extends State<ShowAllLineOfDay> {
                   child: Column(
                     children: <Widget>[
                       StreamBuilder(
-                          stream: music.getCarouselStream1(),
+                          stream: music.getCarouselStream(),
                           builder:
                               (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                             if (snapshot.hasData) {
@@ -119,7 +119,9 @@ class ShowAllLineOfDayState extends State<ShowAllLineOfDay> {
                                                             FontWeight.w800,
                                                         fontSize: 20,
                                                       fontFamily: 'sf-ui-display-black',
-                                                    )),
+                                                    ),
+                                                  softWrap: true,
+                                                  maxLines: 1,),
                                                 Text(
                                                   '${carousel[index].TrackName}',
                                                   style: TextStyle(
@@ -127,6 +129,8 @@ class ShowAllLineOfDayState extends State<ShowAllLineOfDay> {
                                                       color: Colors.black54,
                                                       fontWeight:
                                                           FontWeight.bold),
+                                                  softWrap: true,
+                                                  maxLines: 1,
                                                 ),
 //                      Color(0xFF340c64)
                                                 Container(
@@ -426,15 +430,36 @@ class ShowAllLineOfDayState extends State<ShowAllLineOfDay> {
                                                 height: 70,
                                                 child: Hero(
                                                   tag: random.GenRanNum(),
-                                            child: Image.network(
-                                                    products[index].ImageUrl,
-                                                    fit: BoxFit.fill,
+                                            child:  Image.network(
+                                              '${products[index].ImageUrl}',
+                                              width:71,
+                                              fit: BoxFit.fill,
+                                              loadingBuilder: (BuildContext context,
+                                                  Widget child,
+                                                  ImageChunkEvent loadingProgress) {
+                                                if (loadingProgress == null)
+                                                  return child;
+                                                return Center(
+                                                  child: CircularProgressIndicator(
+                                                    valueColor: AlwaysStoppedAnimation<
+                                                        Color>(Color(
+                                                        0xFF553772),),
+                                                    value: loadingProgress
+                                                        .expectedTotalBytes != null
+                                                        ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                        loadingProgress
+                                                            .expectedTotalBytes
+                                                        : null,
                                                   ),
+                                                );
+                                              },
+                                            ),
                                                 ),
                                               ),
                                             ),
                                             Container(
-                                              width: MediaQuery.of(context).size.width/2.3,
+                                              width: MediaQuery.of(context).size.width/2.38,
                                               padding:
                                                   EdgeInsets.only(left: 12),
                                               height: 100,
@@ -452,6 +477,8 @@ class ShowAllLineOfDayState extends State<ShowAllLineOfDay> {
                                                                   FontWeight
                                                                       .bold),
                                                                        overflow: TextOverflow.fade,
+                                                          softWrap: true,
+                                                          maxLines: 2,
                                                         ),
                                                       ],
                                                     ),
@@ -466,7 +493,10 @@ class ShowAllLineOfDayState extends State<ShowAllLineOfDay> {
                                                         style: TextStyle(
                                                             color:
                                                                 Colors.black54),
+                                                        softWrap: true,
+                                                        maxLines: 2,
                                                       ),
+
                                                     ),
                                                     Row(children: [
                                                       SvgPicture.asset(
@@ -479,6 +509,8 @@ class ShowAllLineOfDayState extends State<ShowAllLineOfDay> {
                                                             fontFamily: 'CircularStd-Book',
                                                             color:
                                                                 Colors.black54),
+                                                        softWrap: true,
+                                                        maxLines: 2,
                                                       )
                                                     ]),
                                                   ]),
