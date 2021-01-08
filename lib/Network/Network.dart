@@ -4,9 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:gal/models/UserModel.dart';
 import 'package:gal/screens/Admin/Add/UploadQuestion.dart';
 import 'package:gal/screens/HomeTabs/Home.dart';
+import 'package:gal/utils/Date.dart';
 import 'package:gal/utils/Dialog.dart';
 import 'package:path/path.dart' as Path;
 import 'package:provider/provider.dart';
@@ -20,7 +20,7 @@ class Network extends ChangeNotifier {
   final CollectionReference leaderboard_collection =
   Firestore.instance.collection('LeaderBoard');
   final CollectionReference carouselmusic_collection1 =
-  Firestore.instance.collection('CarouselMusic1');
+  Firestore.instance.collection('CarouselMusic');
   var uploadedFileURL;
   var login_state = false;
   var login_state_second = false;
@@ -64,6 +64,7 @@ class Network extends ChangeNotifier {
           PostProfile(
             name: name,
             phone: phone,
+            email: user.user.email,
             id: user.user.uid,
           );
           Navigator.pushReplacement(
@@ -79,37 +80,34 @@ class Network extends ChangeNotifier {
     }
   }
 
-  void PostProfile({name, phone, id}) async {
+  void PostProfile({name, phone, id,email}) async {
     await databaseReference.collection("users").document(id).setData({
       'name': name.toString(),
       'phone': phone.toString(),
+      'email': email.toString(),
       'userid': id.toString(),
       'city': '',
       'country': '',
       'Token': '5' ,
-      'Wallet': '0',
       'image': '',
-      'points': '0',
+      'points': 0,
     });
   }
 
-  void UpdateProfileTokenBuy({wallet, token, id, context}) async {
+  void UpdateProfileTokenBuy({token, id, context}) async {
     var webservices = Provider.of<Network>(context, listen: false);
     var dialog = Provider.of<Dialogs>(context, listen: false);
     try {
       await databaseReference.collection("users").document(id).updateData({
-        'Wallet': wallet.toString(),
-        'Token': token.toString(),
+        'Token': token.toString()??'',
       }).then((value) {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => Home()));
         dialog.showSuccess(context);
-        webservices.Login_SetState();
       });
     } catch (e) {
       Navigator.pop(context);
       dialog.showSignLoginError(context, e.message);
-      webservices.Login_SetState();
     }
   }
 
@@ -117,7 +115,7 @@ class Network extends ChangeNotifier {
     var dialog = Provider.of<Dialogs>(context, listen: false);
     try {
       await databaseReference.collection("users").document(id).updateData({
-        'Token': token.toString(),
+        'Token': token.toString()??'',
       });
     } catch (e) {
       dialog.showSignLoginError(context, e.message);
@@ -149,8 +147,8 @@ class Network extends ChangeNotifier {
       });
       await uploadTask.onComplete.then((value) {
         databaseReference.collection(collection).document(id).updateData({
-          'ImageUrl': imageurl_data.toString(),
-          'MusicUrl': musicurl_data.toString(),
+          'ImageUrl': imageurl_data.toString()??'',
+          'MusicUrl': musicurl_data.toString()??'',
         });
       });
       Login_SetState();
@@ -173,10 +171,10 @@ class Network extends ChangeNotifier {
     var dialog = Provider.of<Dialogs>(context, listen: false);
     try {
       await databaseReference.collection(collection).document(id).updateData({
-        'AlbumName': AlbumName.toString(),
-        'MusicLength': MusicLength.toString(),
-        'MusicToken': MusicToken.toString(),
-        'TrackName': TrackName.toString(),
+        'AlbumName': AlbumName.toString()??'',
+        'MusicLength': MusicLength.toString()??'',
+        'MusicToken': MusicToken.toString()??'',
+        'TrackName': TrackName.toString()??'',
       }).then((value) {
         dialog.showSuccess(context);
         webservices.Login_SetState();
@@ -197,22 +195,24 @@ class Network extends ChangeNotifier {
     MusicUrl,
     collection,
     TrackName,
+    ImageUrl,
     userid,
   }) async {
-    var webservices = Provider.of<Network>(context, listen: false);
-    var dialog = Provider.of<Dialogs>(context, listen: false);
-    try {
-      await databaseReference.collection(collection).document().setData({
-        'AlbumName': AlbumName.toString(),
-        'userid': userid.toString(),
-        'MusicLength': MusicLength.toString(),
-        'MusicUrl': MusicUrl.toStirng(),
-        'MusicToken': MusicToken.toString(),
-        'TrackName': TrackName.toString(),
+    print(AlbumName);
+    print(AlbumName);
+    print(AlbumName);
+    print(AlbumName);
+    print(AlbumName);
+      await databaseReference.collection('UserGuess').add({
+        'AlbumName': AlbumName??'',
+        'userid': userid??'',
+        'MusicLength': MusicLength??'',
+        'MusicUrl': MusicUrl??'',
+        'MusicToken': MusicToken??'',
+        'TrackName': TrackName??'',
+        'ImageUrl': ImageUrl,
       });
-    } catch (e) {
-      dialog.showSignLoginError(context, e.message);
-    }
+   
   }
 
 
@@ -228,10 +228,10 @@ class Network extends ChangeNotifier {
     var dialog = Provider.of<Dialogs>(context, listen: false);
     try {
       await databaseReference.collection(collection).document(id).updateData({
-        'LineOne': LineOne.toString(),
-        'LineTwo': LineTwo.toString(),
-        'LineThree': LineThree.toString(),
-        'answer': answer.toString(),
+        'LineOne': LineOne.toString()??'',
+        'LineTwo': LineTwo.toString()??'',
+        'LineThree': LineThree.toString()??'',
+        'answer': answer.toString()??'',
       }).then((value) {
         dialog.showSuccess(context);
         webservices.Login_SetState();
@@ -243,23 +243,6 @@ class Network extends ChangeNotifier {
   }
 
 
-
-/*void changePassword({ password,context}) async{
-   final scaffold = Scaffold.of(context);
-      var dialog = Provider.of<Dialogs>(context, listen: false);
-   //Create an instance of the current user. 
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-
-    //Pass in the password to updatePassword.
-    user.updatePassword(password).then((_){
-      Login_SetState();
-      scaffold.showSnackBar(new SnackBar(content: new Text('Password Changed Sucessfully!')));
-    }).catchError((error){
-      dialog.showSignLoginError(context, error.message);
-      Login_SetState();
-      //This might happen, when the wrong password is in, the user isn't found, or if the user hasn't logged in recently.
-    });
-  }*/
 
 
   void UpdateSlidder({context,
@@ -274,11 +257,11 @@ class Network extends ChangeNotifier {
     var dialog = Provider.of<Dialogs>(context, listen: false);
     try {
       await databaseReference.collection(collection).document(id).updateData({
-        'AlbumName': AlbumName.toString(),
-        'rate': rate.toString(),
-        'Token': Token.toString(),
-        'TrackName': TrackName.toString(),
-        'time': time,
+        'AlbumName': AlbumName.toString()??'',
+        'rate': rate.toString()??'',
+        'Token': Token.toString()??'',
+        'TrackName': TrackName.toString()??'',
+        'time': time??'',
       }).then((value) {
         dialog.showSuccess(context);
         webservices.Login_SetState();
@@ -289,26 +272,6 @@ class Network extends ChangeNotifier {
     }
   }
 
-  void UpdateProfileWalletBuy({wallet,
-    id,
-    context,
-}) async {
-    var webservices = Provider.of<Network>(context, listen: false);
-    var dialog = Provider.of<Dialogs>(context, listen: false);
-    try {
-      await databaseReference.collection("users").document(id).updateData({
-        'Wallet': wallet.toString(),
-      }).then((value) {
-        Navigator.pop(context);
-        dialog.showSuccess(context);
-//        webservices.Login_SetState();
-      });
-    } catch (e) {
-      Navigator.pop(context);
-      dialog.showSignLoginError(context, e.message);
-//      webservices.Login_SetState();
-    }
-  }
 
   void Delete({id, context, collection}) async {
     var webservices = Provider.of<Network>(context, listen: false);
@@ -342,17 +305,18 @@ class Network extends ChangeNotifier {
       await uploadTask.onComplete;
       storageReferenceImage.getDownloadURL().then((value) {
         databaseReference.collection("users").document(id).updateData({
-          'name': name.toString(),
-          'phone': phone.toString(),
-          'city': city.toString(),
-          'country': country.toString(),
-          'image': value.toString(),
+          'name': name.toString()??'',
+          'phone': phone.toString()??'',
+          'city': city.toString()??'',
+          'country': country.toString()??'',
+          'image': value.toString()??'',
         }).then((value) {
           webservices.showSuccess(context);
           Login_SetState();
         });
       });
     } catch (e) {
+      Login_SetState();
       webservices.showSignLoginError(context, e.message);
     }
   }
@@ -401,7 +365,7 @@ class Network extends ChangeNotifier {
 
       StorageUploadTask uploadTask = storageReferenceImage.putFile(image);
       await uploadTask.onComplete;
-      await storageReferenceImage.getDownloadURL().then((imageurl) {
+      await storageReferenceImage.getDownloadURL().then((imageurl)async {
         imageurl_data = imageurl;
         StorageReference storageReferenceMusic = FirebaseStorage.instance
             .ref()
@@ -411,19 +375,17 @@ class Network extends ChangeNotifier {
           progress = event.snapshot.bytesTransferred.toDouble() /
               event.snapshot.totalByteCount.toDouble();
         });
-        storageReferenceMusic.getDownloadURL().then((musicurl) {
-          musicurl_data = musicurl;
-        });
+        musicurl_data = await storageReferenceMusic.getDownloadURL();
       });
       await uploadTask.onComplete.then((value) {
         databaseReference.collection("CarouselMusic").document(id).setData({
-          'AlbumName': AlbumName.toString(),
-          'TrackName': TrackName.toString(),
-          'ImageUrl': imageurl_data.toString(),
-          'MusicUrl': musicurl_data.toString(),
-          'Token': MusicToken.toString(),
-          'time': MusicLength.toString(),
-          'rate': MusicLike.toString(),
+          'AlbumName': AlbumName.toString()??'',
+          'TrackName': TrackName.toString()??'',
+          'ImageUrl': imageurl_data.toString()??'',
+          'MusicUrl': musicurl_data.toString()??'',
+          'Token': MusicToken.toString()??'',
+          'time': MusicLength.toString()??'',
+          'rate': MusicLike.toString()??'',
         });
       });
       Login_SetState();
@@ -450,7 +412,7 @@ class Network extends ChangeNotifier {
 
       StorageUploadTask uploadTask = storageReferenceImage.putFile(image);
       await uploadTask.onComplete;
-      await storageReferenceImage.getDownloadURL().then((imageurl) {
+      await storageReferenceImage.getDownloadURL().then((imageurl)async {
         imageurl_data = imageurl;
         StorageReference storageReferenceMusic = FirebaseStorage.instance
             .ref()
@@ -460,18 +422,16 @@ class Network extends ChangeNotifier {
           progress = event.snapshot.bytesTransferred.toDouble() /
               event.snapshot.totalByteCount.toDouble();
         });
-        storageReferenceMusic.getDownloadURL().then((musicurl) {
-          musicurl_data = musicurl;
-        });
+        musicurl_data = await storageReferenceMusic.getDownloadURL();
       });
       await uploadTask.onComplete.then((value) {
         databaseReference.collection("NewRelease").document(id).setData({
-          'AlbumName': AlbumName.toString(),
-          'TrackName': TrackName.toString(),
-          'ImageUrl': imageurl_data.toString(),
-          'MusicUrl': musicurl_data.toString(),
-          'MusicToken': MusicToken.toString(),
-          'MusicLength': MusicLength.toString(),
+          'AlbumName': AlbumName.toString()??'',
+          'TrackName': TrackName.toString()??'',
+          'ImageUrl': imageurl_data.toString()??'',
+          'MusicUrl': musicurl_data.toString()??'',
+          'MusicToken': MusicToken.toString()??'',
+          'MusicLength': MusicLength.toString()??'',
         });
       });
       Login_SetState();
@@ -490,6 +450,7 @@ class Network extends ChangeNotifier {
     MusicToken,
     MusicLength,
     id}) async {
+    var date = Provider.of<Date>(context, listen: false);
     var webservices = Provider.of<Dialogs>(context, listen: false);
     try {
       StorageReference storageReferenceImage = FirebaseStorage.instance
@@ -498,7 +459,7 @@ class Network extends ChangeNotifier {
 
       StorageUploadTask uploadTask = storageReferenceImage.putFile(image);
       await uploadTask.onComplete;
-      await storageReferenceImage.getDownloadURL().then((imageurl) {
+      await storageReferenceImage.getDownloadURL().then((imageurl)async{
         imageurl_data = imageurl;
         StorageReference storageReferenceMusic = FirebaseStorage.instance
             .ref()
@@ -508,18 +469,17 @@ class Network extends ChangeNotifier {
           progress = event.snapshot.bytesTransferred.toDouble() /
               event.snapshot.totalByteCount.toDouble();
         });
-        storageReferenceMusic.getDownloadURL().then((musicurl) {
-          musicurl_data = musicurl;
-        });
+        musicurl_data = await storageReferenceMusic.getDownloadURL();
       });
       await uploadTask.onComplete.then((value) {
         databaseReference.collection("LineOfTheDay").document(id).setData({
-          'AlbumName': AlbumName.toString(),
-          'TrackName': TrackName.toString(),
-          'ImageUrl': imageurl_data.toString(),
-          'MusicUrl': musicurl_data.toString(),
-          'MusicToken': MusicToken.toString(),
-          'MusicLength': MusicLength.toString(),
+          'AlbumName': AlbumName.toString()??'',
+          'TrackName': TrackName.toString()??'',
+          'ImageUrl': imageurl_data.toString()??'',
+          'MusicUrl': musicurl_data.toString()??'',
+          'MusicToken': MusicToken.toString()??'',
+          'created': date.getCurrentDate3Format().toString()??'',
+          'MusicLength': MusicLength.toString()??'',
         });
       }).then((value){
         Login_SetState();
@@ -559,26 +519,26 @@ class Network extends ChangeNotifier {
       if (ref.exists) {
         databaseReference.collection("LeaderBoard").document(userid).updateData(
           {
-            'points': point,
-            'Date': date,
+            'points': point??'',
+            'Date': date??'',
           },
         ).then((value) {
           databaseReference.collection("users").document(userid).updateData({
-            'points': point,
+            'points': point??'',
           });
         });
       } else {
         databaseReference.collection("LeaderBoard").document(userid).setData(
           {
-            'userid': userid,
-            'points': point,
-            'Email': email,
-            'Date': date,
-            'Name': name,
+            'userid': userid??'',
+            'points': point??'',
+            'Email': email??'',
+            'Date': date??'',
+            'Name': name??'',
           },
         ).then((value) {
           databaseReference.collection("users").document(userid).updateData({
-            'points': point,
+            'points': point??'',
           });
         });
       }
@@ -598,11 +558,12 @@ class Network extends ChangeNotifier {
     try {
       databaseReference.collection("Question").document().setData(
         {
-          'LineOne': LineOne,
-          'LineTwo': LineTwo,
-          'LineThree': LineThree,
-          'Lineofday': guess_id,
-          'answer': answer,
+          'LineOne': LineOne??'',
+          'LineTwo': LineTwo??'',
+          'LineThree': LineThree??'',
+          'Lineofday': guess_id??'',
+          'answer': answer??'',
+           'lastMessageTime': DateTime.now()??'',
         },
       );
       Login_SetState();
@@ -622,21 +583,19 @@ class Network extends ChangeNotifier {
     return newrelease_collection.snapshots();
   }
 
-  /* DocumentReference getUSersProfiStream(docid) {
-       var userQuery = Firestore.instance.collection('users').document(docid);
-    return userQuery;
-  }*/
+
 
   Stream<QuerySnapshot> getQuestionStream({id}) {
     var question_collection = Firestore.instance
         .collection('Question')
-        .where('Lineofday', isEqualTo: id);
+        .where('Lineofday', isEqualTo: id)
+        .orderBy('lastMessageTime', descending: false);
     return question_collection.snapshots();
   }
 
   Stream<QuerySnapshot> getMyGuessesStream(userid) {
     var myguesses_collection = Firestore.instance
-        .collection('MyGuesses')
+        .collection('UserGuess')
         .where('userid', isEqualTo: userid);
     return myguesses_collection.snapshots();
   }

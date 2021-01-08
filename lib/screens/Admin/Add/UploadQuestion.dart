@@ -29,10 +29,15 @@ class UploadQuestionState extends State<UploadQuestion> {
   var _kDuration = const Duration(milliseconds: 300);
   var _kCurve = Curves.ease;
   List question_length = List(30);
-  var lineone;
-  var linetwo;
-  var linethree;
-  var answer;
+  
+
+
+   static final TextEditingController controller1 = TextEditingController();
+    static final TextEditingController controller2 = TextEditingController();
+    static final TextEditingController controller3 = TextEditingController();
+    static final TextEditingController controller4 = TextEditingController();
+ 
+
 
   @override
   Widget build(BuildContext context) {
@@ -50,23 +55,25 @@ class UploadQuestionState extends State<UploadQuestion> {
           label: Text("Guess"),
         ),
       ),
-      bottomNavigationBar:  BottomNavigationWidget(),
-      appBar:  AppBar(
-          title: Text('Add Question' , style: TextStyle(color: Color(0xFF340c64)),),
-          elevation: 10,
-          centerTitle: true,
-          leading: Icon(Icons.menu),
-          backgroundColor: Colors.white,
-          actions: <Widget>[
-            IconButton(
-              onPressed: () {
-                return null;
-              },
-              icon: SvgPicture.asset('assets/images/moredot.svg'),
-            )
-          ],
+      bottomNavigationBar: BottomNavigationWidget(),
+      appBar: AppBar(
+        title: Text(
+          'Add Question',
+          style: TextStyle(color: Color(0xFF340c64)),
         ),
-
+        elevation: 10,
+        centerTitle: true,
+        leading: Icon(Icons.menu),
+        backgroundColor: Colors.white,
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              return null;
+            },
+            icon: SvgPicture.asset('assets/images/moredot.svg'),
+          )
+        ],
+      ),
       body: PageView.builder(
           physics: NeverScrollableScrollPhysics(),
           itemCount: question_length.length,
@@ -87,15 +94,7 @@ class UploadQuestionState extends State<UploadQuestion> {
                           padding: EdgeInsets.only(top: 10, bottom: 10),
                           width: 250,
                           child: TextFormField(
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Line One Required';
-                                } else {
-                                  lineone = value;
-                                  return null;
-                                }
-                              },
-                              style: TextStyle(color: Colors.black87),
+                              controller:controller1,                              style: TextStyle(color: Colors.black87),
                               cursorColor: Colors.black87,
                               decoration: InputDecoration(
                                 hintStyle: TextStyle(color: Colors.black87),
@@ -119,14 +118,7 @@ class UploadQuestionState extends State<UploadQuestion> {
                           padding: EdgeInsets.only(top: 10, bottom: 10),
                           width: 250,
                           child: TextFormField(
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Line Two Required';
-                                } else {
-                                  linetwo = value;
-                                  return null;
-                                }
-                              },
+                               controller:controller2,    
                               style: TextStyle(color: Colors.black87),
                               cursorColor: Colors.black87,
                               decoration: InputDecoration(
@@ -151,14 +143,7 @@ class UploadQuestionState extends State<UploadQuestion> {
                           padding: EdgeInsets.only(top: 10, bottom: 10),
                           width: 250,
                           child: TextFormField(
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Line Three Required';
-                                } else {
-                                  linethree = value;
-                                  return null;
-                                }
-                              },
+                              controller:controller3,    
                               style: TextStyle(color: Colors.black87),
                               cursorColor: Colors.black87,
                               decoration: InputDecoration(
@@ -183,14 +168,7 @@ class UploadQuestionState extends State<UploadQuestion> {
                           padding: EdgeInsets.only(top: 10, bottom: 10),
                           width: 250,
                           child: TextFormField(
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Answer Required';
-                                } else {
-                                  answer = value;
-                                  return null;
-                                }
-                              },
+                               controller:controller4,    
                               style: TextStyle(color: Colors.black87),
                               cursorColor: Colors.black87,
                               decoration: InputDecoration(
@@ -219,16 +197,15 @@ class UploadQuestionState extends State<UploadQuestion> {
                                 child: webservices_consumer.login_state == false
                                     ? FlatButton(
                                         onPressed: () {
-                                          if (form_key.currentState
-                                              .validate()) {
+                                         
                                             webservices_consumer
                                                 .Login_SetState();
                                             webservices.PostQuestion(
                                               context: context,
-                                              answer: answer,
-                                              LineOne: lineone,
-                                              LineTwo: linetwo,
-                                              LineThree: linethree,
+                                              answer: controller4.text,
+                                              LineOne: controller1.text,
+                                              LineTwo: controller2.text,
+                                              LineThree: controller3.text,
                                               guess_id: widget.guess_id,
                                             ).then((value) {
                                               showNextQuestion(
@@ -238,7 +215,7 @@ class UploadQuestionState extends State<UploadQuestion> {
                                                   _kCurve,
                                                   index);
                                             });
-                                          }
+                                          
                                         },
                                         color: Color(0xFF340c64),
                                         shape: RoundedRectangleBorder(
@@ -262,8 +239,11 @@ class UploadQuestionState extends State<UploadQuestion> {
                                           ),
                                         ),
                                       )
-                                    : CircularProgressIndicator(valueColor:  AlwaysStoppedAnimation<Color>( Color(0xFF340c64)),)
-                            ))
+                                    : CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                Color(0xFF340c64)),
+                                      )))
                       ],
                     ),
                   );
@@ -308,7 +288,7 @@ class UploadQuestionState extends State<UploadQuestion> {
                           width: 150,
                           decoration: BoxDecoration(
                               border: Border.all(
-                                color:Color(0xFF340c64),
+                                color: Color(0xFF340c64),
                               ),
                               borderRadius: BorderRadius.circular(26)),
                           child: FlatButton(
@@ -317,10 +297,12 @@ class UploadQuestionState extends State<UploadQuestion> {
                               Navigator.pushReplacement(
                                 context,
                                 PageRouteBuilder(
-                                  pageBuilder: (context, animation, secondaryAnimation) {
-                                    return  AdminPage();
+                                  pageBuilder:
+                                      (context, animation, secondaryAnimation) {
+                                    return AdminPage();
                                   },
-                                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
                                     return FadeTransition(
                                       opacity: animation,
                                       child: child,
@@ -329,7 +311,7 @@ class UploadQuestionState extends State<UploadQuestion> {
                                 ),
                               );
                             },
-                            color:Color(0xFF340c64),
+                            color: Color(0xFF340c64),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(26)),
                             padding: EdgeInsets.all(0.0),
@@ -364,7 +346,7 @@ class UploadQuestionState extends State<UploadQuestion> {
                           width: 150,
                           decoration: BoxDecoration(
                               border: Border.all(
-                                color:Color(0xFF340c64),
+                                color: Color(0xFF340c64),
                               ),
                               borderRadius: BorderRadius.circular(26)),
                           child: FlatButton(

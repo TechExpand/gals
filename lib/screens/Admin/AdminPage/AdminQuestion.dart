@@ -43,7 +43,7 @@ class AdminQuestionState extends State<AdminQuestion> {
               child: Text(
                 'Cancel',
                 style: TextStyle(
-                    fontSize: 17,
+                    fontSize: 14,
                     color: Colors.black,
                     fontWeight: FontWeight.bold),
                 overflow: TextOverflow.fade,
@@ -117,6 +117,8 @@ class AdminQuestionState extends State<AdminQuestion> {
                               'Answer: ${products[index].LineTwo}',
                               style: TextStyle(
                                   color: Colors.black54, fontSize: 18),
+                                   maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                             ),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +131,7 @@ class AdminQuestionState extends State<AdminQuestion> {
                                     style: TextStyle(
                                         color: Colors.black54, fontSize: 18),
                                     maxLines: 1,
-                                    overflow: TextOverflow.fade,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                                 Padding(
@@ -140,7 +142,7 @@ class AdminQuestionState extends State<AdminQuestion> {
                                     style: TextStyle(
                                         color: Colors.black54, fontSize: 18),
                                     maxLines: 1,
-                                    overflow: TextOverflow.fade,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                                 Padding(
@@ -152,8 +154,8 @@ class AdminQuestionState extends State<AdminQuestion> {
                                         .toUpperCase(),
                                     style: TextStyle(
                                         color: Colors.black54, fontSize: 18),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.fade,
+                                   maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ],

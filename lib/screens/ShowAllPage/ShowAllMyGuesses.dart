@@ -1,14 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gal/Network/Network.dart';
 import 'package:gal/models/CarouselModel.dart';
 import 'package:gal/models/GuessModel.dart';
+import 'package:gal/screens/HomeTabs/Home.dart';
 import 'package:gal/screens/HomeTabs/player.dart';
 import 'package:gal/utils/Dialog.dart';
 import 'package:gal/utils/RandomNum.dart';
 import 'package:provider/provider.dart';
+
+import '../HomePage.dart';
 
 class ShowAllMyGuess extends StatefulWidget {
   @override
@@ -25,26 +29,86 @@ class ShowAllMyGuessState extends State<ShowAllMyGuess> {
   Widget build(BuildContext context) {
     int _currentIndex = 0;
     List<Guess> products;
-    List<Carousel> carousel;
 
-    List cardList = [
-      Text(''),
-      Text(''),
-      Text(''),
-    ];
-
-    List<T> map<T>(List list, Function handler) {
-      List<T> result = [];
-      for (var i = 0; i < list.length; i++) {
-        result.add(handler(i, list[i]));
-      }
-      return result;
-    }
+    final _scaffoldKeyMyGuess = GlobalKey<ScaffoldState>();
     var random = Provider.of<RandomNum>(context, listen: false);
     var music = Provider.of<Network>(context);
     var dialog = Provider.of<Dialogs>(context, listen: false);
-    return Material(
-      child: SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("My Guesses", style: TextStyle(color: Color(0xFF340c64) ),),
+        centerTitle: true,
+        elevation: 10,
+        leading: InkWell(
+          onTap: () {
+            _scaffoldKeyMyGuess.currentState.openDrawer();
+          },
+          child: Image.asset(
+            'assets/images/menudrawer.png',
+            scale: 4,
+          ),
+        ),
+        backgroundColor: Colors.white,
+        actions: <Widget>[
+          PopupMenuButton(
+            icon: SvgPicture.asset('assets/images/moredot.svg'),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+              PopupMenuItem(
+                  height: 15,
+                  child: InkWell(
+                      onTap: () async {
+                        FirebaseAuth.instance.signOut().then((value) {
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) {
+                                return HomePage();
+                              },
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
+                        });
+                      },
+                      child: Text(
+                        'Log Out',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ))),
+            ],
+          )
+        ],
+      ),
+      drawer: SizedBox(
+        width: 250,
+        child: Drawer(
+          child: DrawerWidget(_scaffoldKeyMyGuess.currentContext),
+        ),
+      ),
+      key: _scaffoldKeyMyGuess,
+      floatingActionButtonLocation:
+      FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Container(
+        height: 40,
+        width: 110,
+        child: FloatingActionButton.extended(
+          elevation: 0,
+          
+          backgroundColor: Color(0xFF340c64),
+          onPressed: () {},
+          icon: SvgPicture.asset('assets/images/note.svg'),
+          label: Text("Guess"),
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationWidget(),
+      body: SingleChildScrollView(
         child: StreamBuilder(
             stream: Firestore.instance
                 .collection('users')
@@ -56,264 +120,6 @@ class ShowAllMyGuessState extends State<ShowAllMyGuess> {
                 return SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      StreamBuilder(
-                          stream: music.getCarouselStream(),
-                          builder:
-                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                            if (snapshot.hasData) {
-                              carousel = snapshot.data.documents
-                                  .map((doc) => Carousel.fromMap(
-                                  doc.data, doc.documentID))
-                                  .toList();
-                              return CarouselSlider.builder(
-                                itemCount:
-                                carousel == null ? 0 : carousel.length,
-                                itemBuilder: (context, index) {
-                                  return Stack(
-                                    children: <Widget>[
-                                      Material(
-                                        elevation: 5,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                          BorderRadius.circular(3),
-                                          child: Container(
-                                            height: 450,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            child: Hero(  
-                                              tag: random.GenRanNum(),
-                                               child: Image.network(
-                                                '${carousel[index].image}',
-                                                fit: BoxFit.fill,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Center(
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                            BorderRadius.circular(20),
-                                            color: Colors.white70,
-                                          ),
-                                          margin: EdgeInsets.only(
-                                              top: MediaQuery.of(context).size.height /
-                                                  4),
-                                          child: ListTile(
-                                            title: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                              children: <Widget>[
-                                                Text(
-                                                    '${carousel[index].AlbumName}',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                        FontWeight.w800,
-                                                        fontSize: 20,
-                                                      fontFamily: 'sf-ui-display-black',
-                                                    ),
-                                                  softWrap: true,
-                                                  maxLines: 1,
-                                                ),
-                                                Text(
-                                                  '${carousel[index].TrackName}',
-                                                  style: TextStyle(
-                                                      color: Colors.black54,
-                                                      fontFamily: 'CircularStd-Black',
-                                                      fontWeight:
-                                                      FontWeight.bold),
-                                                  softWrap: true,
-                                                  maxLines: 1,
-                                                ),
-//                      Color(0xFF340c64)
-                                                Container(
-                                                  height: 30,
-                                                  child: Row(
-                                                    children: <Widget>[
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(right:5.0),
-                                                        child: SvgPicture.asset(
-                                                            'assets/images/heart.svg'),
-                                                      ),
-                                                      Text(
-                                                        '${carousel[index].rate}k',
-                                                        style: TextStyle(
-                                                            color: Color(
-                                                                0xFF553772),
-                                                            fontSize: 15,
-                                                            fontFamily: 'CircularStd-Book',
-                                                            fontWeight:
-                                                            FontWeight
-                                                                .bold),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                        const EdgeInsets
-                                                            .only(
-                                                            left: 2.0),
-                                                        child: SvgPicture.asset(
-                                                            'assets/images/Bell.svg'),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                        const EdgeInsets
-                                                            .only(
-                                                            left: 2.0),
-                                                        child: Text(
-                                                          '${carousel[index].time}min',
-                                                          style: TextStyle(
-                                                              fontSize: 15,
-                                                              color: Colors
-                                                                  .black54,
-                                                              fontFamily: 'CircularStd-Book',
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .bold),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                          padding:
-                                                          const EdgeInsets
-                                                              .only(
-                                                              left: 4.0),
-                                                          child: SvgPicture.asset(
-                                                              'assets/images/token.svg')),
-                                                      Padding(
-                                                        padding:
-                                                        const EdgeInsets
-                                                            .only(
-                                                            left: 3.0),
-                                                        child: Text(
-                                                          '${carousel[index].Token} Token',
-                                                          style: TextStyle(
-                                                              color: Color(
-                                                                  0xFF553772),
-                                                              fontSize: 13,
-                                                              fontFamily: 'CircularStd-Book',
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .bold),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            trailing: InkWell(
-                                              onTap: () {
-                                                if (int.parse(userDocument[
-                                                'Token']) >=
-                                                    int.parse(carousel[index]
-                                                        .Token)) {
-                                                  Navigator.push(
-                                                      context,
-                                                      PageRouteBuilder(
-                                                        pageBuilder: (context,
-                                                            animation,
-                                                            secondaryAnimation) {
-                                                          return AudioApp(
-                                                          kUrl: carousel[index].file,
-                                                        image: carousel[index].image,
-                                                        name: carousel[index].AlbumName,
-                                                        title: carousel[index].TrackName,
-                                                          );
-                                                        },
-                                                        transitionsBuilder:
-                                                            (context,
-                                                            animation,
-                                                            secondaryAnimation,
-                                                            child) {
-                                                          return FadeTransition(
-                                                            opacity: animation,
-                                                            child: child,
-                                                          );
-                                                        },
-                                                      )).then((value) {
-                                                    music
-                                                        .UpdateProfileTokenPlay(
-                                                      context: context,
-                                                      token: int.parse(
-                                                          userDocument[
-                                                          'Token']) -
-                                                          int.parse(
-                                                              carousel[index]
-                                                                  .Token),
-                                                      id: userDocument[
-                                                      'userid'],
-                                                    );
-                                                  });
-                                                } else {
-                                                  dialog.buyTokens(
-                                                    context,
-                                                    music.userid,
-                                                    userDocument['Token'],
-                                                    userDocument['Wallet'],
-                                                  );
-                                                }
-                                              },
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 20.0,
-                                                    right: 0,
-                                                    left: 0),
-                                                child: Image.asset(
-                                                    'assets/images/playbig.png', width: 30,height:30),
-                                              ),
-                                            ),
-                                          ),
-                                          height: 85,
-                                          width: MediaQuery.of(context)
-                                              .size
-                                              .width -
-                                              30,
-                                        ),
-                                      )
-                                    ],
-                                  );
-                                },
-                                options: CarouselOptions(
-                                  autoPlayInterval: Duration(seconds: 8),
-                                  autoPlay: true,
-                                  aspectRatio: 1.3,
-                                  enlargeCenterPage: false,
-                                  viewportFraction: 1,
-                                  onPageChanged: (index, reason) {
-                                    setState(() {
-                                      _currentIndex = index;
-                                    });
-                                  },
-                                ),
-                              );
-                            }
-                            return Center(
-                              child: CircularProgressIndicator(
-                                valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
-                              ),
-                            );
-                          }),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: map<Widget>(cardList, (index, url) {
-                          return Container(
-                            width: 10.0,
-                            height: 10.0,
-                            margin: EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 2.0),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: _currentIndex == index
-                                  ? Color(0xFF340c64)
-                                  : Colors.grey,
-                            ),
-                          );
-                        }),
-                      ),
                       Padding(
                         padding:
                         const EdgeInsets.only(left: 8.0, right: 8, top: 16),
@@ -340,19 +146,21 @@ class ShowAllMyGuessState extends State<ShowAllMyGuess> {
                                   .map((doc) => Guess.fromMap(doc.data, doc.documentID))
                                   .toList();
                               if(products.length == 0){
-                                return ListTile(
-                                  title: Center(child: Text('YOU DONOT HAVE ANY GUESSES',style: TextStyle(
-                                      fontFamily: 'CircularStd-Book',
-                                      fontWeight:
-                                      FontWeight
-                                          .bold),)),
-                                );
+                                return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(child: Text('YOU DO NOT HAVE ANY GUESSES',style: TextStyle(
+                                        fontFamily: 'CircularStd-Book',
+                                        fontSize: 15,
+                                        fontWeight:
+                                        FontWeight
+                                            .bold),)),
+                                  );
                               }
                               else {
                                 return ListView.builder(
                                   physics: ScrollPhysics(),
                                   shrinkWrap: true,
-                                  itemCount: products == null ? 0 : 4,
+                                  itemCount: products == null ? 0:products.length,
                                   itemBuilder: (context, index) {
                                     return Card(
                                       elevation: 2,
@@ -362,92 +170,40 @@ class ShowAllMyGuessState extends State<ShowAllMyGuess> {
                                           child: Row(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: <Widget>[
-                                              InkWell(
-                                                onTap: () {
-                                                  if (int.parse(userDocument[
-                                                  'Token']) >=
-                                                      int.parse(products[index]
-                                                          .MusicToken)) {
-                                                    Navigator.push(
-                                                        context,
-                                                        PageRouteBuilder(
-                                                          pageBuilder: (context,
-                                                              animation,
-                                                              secondaryAnimation) {
-                                                            return AudioApp(
-                                                              kUrl: products[index]
-                                                                  .MusicUrl,
-                                                              image: products[index]
-                                                                  .ImageUrl,
-                                                            );
-                                                          },
-                                                          transitionsBuilder: (context,
-                                                              animation,
-                                                              secondaryAnimation, child) {
-                                                            return FadeTransition(
-                                                              opacity: animation,
-                                                              child: child,
-                                                            );
-                                                          },
-                                                        )).then((value) {
-                                                      music
-                                                          .UpdateProfileTokenPlay(
-                                                        context: context,
-                                                        token: int.parse(
-                                                            userDocument[
-                                                            'Token']) -
-                                                            int.parse(
-                                                                products[index]
-                                                                    .MusicToken),
-                                                        id: userDocument[
-                                                        'userid'],
-                                                      );
-                                                    });
-                                                  } else {
-                                                    dialog.buyTokens(
-                                                      context,
-                                                      music.userid,
-                                                      userDocument['Token'],
-                                                      userDocument['Wallet'],
-                                                    );
-                                                  }
-                                                },
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      top: 15.0, right: 10, left: 10),
-                                                  child: Image.asset('assets/images/play.png', width: 30,height:30),
-                                                ),
-                                              ),
-                                              ClipRRect(
-                                                borderRadius: BorderRadius.circular(3),
-                                                child: Container(
-                                                  height: 70,
-                                                  child: Hero( 
-                                                    tag: random.GenRanNum(),
-                                                    child: Image.network(
-                                                      '${products[index].ImageUrl}',
-                                                      width:71,
-                                                      fit: BoxFit.fill,
-                                                      loadingBuilder: (BuildContext context,
-                                                          Widget child,
-                                                          ImageChunkEvent loadingProgress) {
-                                                        if (loadingProgress == null)
-                                                          return child;
-                                                        return Center(
-                                                          child: CircularProgressIndicator(
-                                                            valueColor: AlwaysStoppedAnimation<
-                                                                Color>(Color(
-                                                                0xFF553772),),
-                                                            value: loadingProgress
-                                                                .expectedTotalBytes != null
-                                                                ? loadingProgress
-                                                                .cumulativeBytesLoaded /
-                                                                loadingProgress
-                                                                    .expectedTotalBytes
-                                                                : null,
-                                                          ),
-                                                        );
-                                                      },
+                                             
+                                              Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: ClipRRect(
+                                                  borderRadius: BorderRadius.circular(3),
+                                                  child: Container(
+                                                    height: 70,
+                                                    child: Hero( 
+                                                      tag: random.GenRanNum(),
+                                                      child: Image.network(
+                                                        '${products[index].ImageUrl}',
+                                                        width:71,
+                                                        fit: BoxFit.fill,
+                                                        loadingBuilder: (BuildContext context,
+                                                            Widget child,
+                                                            ImageChunkEvent loadingProgress) {
+                                                          if (loadingProgress == null)
+                                                            return child;
+                                                          return Center(
+                                                            child: CircularProgressIndicator(
+                                                              valueColor: AlwaysStoppedAnimation<
+                                                                  Color>(Color(
+                                                                  0xFF553772),),
+                                                              value: loadingProgress
+                                                                  .expectedTotalBytes != null
+                                                                  ? loadingProgress
+                                                                  .cumulativeBytesLoaded /
+                                                                  loadingProgress
+                                                                      .expectedTotalBytes
+                                                                  : null,
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -512,45 +268,48 @@ class ShowAllMyGuessState extends State<ShowAllMyGuess> {
                                                     ]
                                                 ),
                                               ),
-
-                                              Container(
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment
-                                                      .spaceBetween,
-                                                  crossAxisAlignment: CrossAxisAlignment
-                                                      .end,
-                                                  children: [
-                                                    Padding(
-                                                      padding: EdgeInsets.only(top: 2.0),
-                                                      child: Icon(Icons.more_horiz,
-                                                        color: Color(0xFF340c64),),
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                        bottom: 2.0,),
-                                                      child: Row(
-                                                        children: <Widget>[
-                                                          Padding(
-                                                            padding: const EdgeInsets
-                                                                .only(right: 5.0),
-                                                            child: SvgPicture.asset(
-                                                                'assets/images/token.svg'),
-                                                          ),
-                                                          Text('${products[index]
-                                                              .MusicToken}' + ' Token',
-                                                            overflow: TextOverflow
-                                                                .fade,
-                                                            style: TextStyle(
-                                                                color: Color(0xFF340c64),
-                                                                fontFamily: 'CircularStd-Book',
-                                                                fontSize: 10,
-                                                                fontWeight: FontWeight
-                                                                    .bold),),
-
-                                                        ],
+                                             Spacer(),
+                                              Padding(
+                                                padding: const EdgeInsets.only(right:20.0),
+                                                child: Container(
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment
+                                                        .spaceBetween,
+                                                    crossAxisAlignment: CrossAxisAlignment
+                                                        .end,
+                                                    children: [
+                                                      Padding(
+                                                        padding: EdgeInsets.only(top: 2.0),
+                                                        child: Icon(Icons.more_horiz,
+                                                          color: Color(0xFF340c64),),
                                                       ),
-                                                    ),
-                                                  ],
+                                                      Padding(
+                                                        padding: EdgeInsets.only(
+                                                          bottom: 2.0,),
+                                                        child: Row(
+                                                          children: <Widget>[
+                                                            Padding(
+                                                              padding: const EdgeInsets
+                                                                  .only(right: 5.0),
+                                                              child: SvgPicture.asset(
+                                                                  'assets/images/token.svg'),
+                                                            ),
+                                                            Text('${products[index]
+                                                                .MusicToken}' + ' Token',
+                                                              overflow: TextOverflow
+                                                                  .fade,
+                                                              style: TextStyle(
+                                                                  color: Color(0xFF340c64),
+                                                                  fontFamily: 'CircularStd-Book',
+                                                                  fontSize: 10,
+                                                                  fontWeight: FontWeight
+                                                                      .bold),),
+
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
 
@@ -575,9 +334,12 @@ class ShowAllMyGuessState extends State<ShowAllMyGuess> {
                   ),
                 );
               }
-              return Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
                 ),
               );
             }),

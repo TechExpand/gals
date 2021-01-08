@@ -28,6 +28,7 @@ void main() {
     ChangeNotifierProvider<RandomNum>(
       create: (context) => RandomNum(),
     ),
+
     
   ], child: MyApp()));
 }
@@ -42,7 +43,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SplashScreen(), //SplashScreen()
+      home: SplashScreen(),
+      //  SplashScreen(), //SplashScreen()
     );
   }
 }

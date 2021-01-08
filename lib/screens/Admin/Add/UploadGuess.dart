@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart'; // For File Upload To F
 import 'package:flutter/material.dart';
 import 'package:gal/Network/Network.dart';
 import 'package:gal/screens/Admin/Add/UploadQuestion.dart';
+import 'package:gal/screens/EditProfile.dart';
 import 'package:gal/screens/HomeTabs/Home.dart';
 import 'package:gal/utils/RandomNum.dart';
 import 'package:path/path.dart' as Path;
@@ -14,17 +15,21 @@ import 'package:flutter/material.dart';
 import 'package:gal/screens/HomeTabs/LineofDay.dart';
 
 class UploadGuess extends StatelessWidget {
+
+   static final TextEditingController controller1 = TextEditingController();
+    static final TextEditingController controller2 = TextEditingController();
+    static final TextEditingController controller3 = TextEditingController();
+    static final TextEditingController controller4 = TextEditingController();
+ 
+
   @override
   Widget build(BuildContext context) {
     var webservices = Provider.of<Network>(context);
     var randomNumberService = Provider.of<RandomNum>(context);
 var upload = Provider.of<FilePickers>(context, listen:false);
  final form_key = GlobalKey<FormState>();
- var albumname;
- var tracktitle;
- var musictoken;
- var musiclength;
-
+ 
+ 
 
 
     return  Scaffold(
@@ -55,7 +60,7 @@ var upload = Provider.of<FilePickers>(context, listen:false);
             },
                       child: Center(child: Padding(
               padding: const EdgeInsets.only(left:3.0),
-              child: Text('Cancel', style: TextStyle(fontSize: 17,color: Colors.black, fontWeight: FontWeight.bold), overflow: TextOverflow.fade,),
+              child: Text('Cancel', style: TextStyle(fontSize: 14,color: Colors.black, fontWeight: FontWeight.bold), overflow: TextOverflow.fade,),
             )),
           ),
           backgroundColor: Colors.white,
@@ -76,14 +81,7 @@ var upload = Provider.of<FilePickers>(context, listen:false);
                         padding: EdgeInsets.only( bottom:10),
                         width: 250,
                         child: TextFormField(
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Album Name Required';
-                          } else {
-                            albumname = value;
-                            return null;
-                          }
-                        },
+                           controller:  controller1,
                             style: TextStyle(color: Colors.black87),
                             cursorColor: Colors.white,
                             decoration: InputDecoration(
@@ -107,14 +105,7 @@ var upload = Provider.of<FilePickers>(context, listen:false);
                         padding: EdgeInsets.only(top:10, bottom:10),
                         width: 250,
                         child: TextFormField(
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Track Name Required';
-                          } else {
-                            tracktitle = value;
-                            return null;
-                          }
-                        },
+                        controller:  controller2,
                             style: TextStyle(color: Colors.black87),
                             cursorColor: Colors.white,
                             decoration: InputDecoration(
@@ -138,14 +129,7 @@ var upload = Provider.of<FilePickers>(context, listen:false);
                         padding: EdgeInsets.only(top:10, bottom:10),
                         width: 250,
                         child: TextFormField(
-                         validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Music Token Required';
-                          } else {
-                            musictoken = value;
-                            return null;
-                          }
-                        },
+                         controller:  controller3,
                             style: TextStyle(color: Colors.black87),
                             cursorColor: Colors.black87,
                             decoration: InputDecoration(
@@ -170,14 +154,7 @@ var upload = Provider.of<FilePickers>(context, listen:false);
                         padding: EdgeInsets.only(top:10, bottom:10),
                         width: 250,
                         child: TextFormField(
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Music Length Required';
-                          } else {
-                            musiclength = value;
-                            return null;
-                          }
-                        },
+                         controller:  controller4,
                             style: TextStyle(color: Colors.black87),
                             cursorColor: Colors.black87,
                             decoration: InputDecoration(
@@ -300,17 +277,17 @@ var upload = Provider.of<FilePickers>(context, listen:false);
                           elevation: 25,
                           child:   webservices_consumer.login_state == false?FlatButton(
                            onPressed: (){
-                             if(form_key.currentState.validate()){
+                            
                          webservices_consumer.Login_SetState();
                          randomNumberService.getRandomString(20);
                          webservices.PostGuess(
                            context: context,
                             image: upload.image,
                             music: upload.file,
-                            AlbumName: albumname,
-                            MusicLength: musiclength,
-                            MusicToken: musictoken,
-                            TrackName: tracktitle,
+                            AlbumName: controller1.text,
+                            MusicLength: controller4.text,
+                            MusicToken: controller3.text,
+                            TrackName: controller2.text,
                             id: randomNumberService.random_num,
                          ).then((value){
                            Navigator.push(
@@ -332,8 +309,8 @@ var upload = Provider.of<FilePickers>(context, listen:false);
                              ),
                            );
                          });
-                             }
-                       },  
+                             },
+                        
                             color: Color(0xFF340c64),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
                             padding: EdgeInsets.all(0.0),

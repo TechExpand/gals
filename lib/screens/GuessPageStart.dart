@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 
 import 'Admin/AdminPage.dart';
 import 'EditProfile.dart';
+import 'HomeTabs/player.dart';
 import 'LeaderboardTab.dart/Leaderboard.dart';
 
 class GuessePage extends StatefulWidget {
@@ -37,15 +38,23 @@ class GuessePage extends StatefulWidget {
 
 class _GuessePageState extends State<GuessePage> {
   List<Guess> products;
-  var answer;
   GlobalKey<FormState> form_key = GlobalKey<FormState>();
   final _controller = new PageController();
+
+  Paint paint = Paint()
+    ..color = Color(0xFF340c64)
+    ..style = PaintingStyle.fill
+    ..strokeCap = StrokeCap.round
+    ..strokeWidth = 17.0;
+
+
+TextEditingController text_controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     var dialog = Provider.of<Dialogs>(context, listen: false);
     var date_utils = Provider.of<Date>(context, listen: false);
-    var webservices = Provider.of<Network>(context);
+    var webservices = Provider.of<Network>(context, listen: false);
     var _kDuration = const Duration(milliseconds: 300);
     var _kCurve = Curves.ease;
     return Scaffold(
@@ -83,40 +92,34 @@ class _GuessePageState extends State<GuessePage> {
               );
             }),
             actions: <Widget>[
-              PopupMenuButton(
-                icon: SvgPicture.asset('assets/images/moredot.svg'),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                  PopupMenuItem(
-                      height: 15,
-                      child: InkWell(
-                          onTap: () async {
-                            FirebaseAuth.instance.signOut().then((value) {
-                              Navigator.pushReplacement(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder:
-                                      (context, animation, secondaryAnimation) {
-                                    return HomePage();
-                                  },
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    return FadeTransition(
-                                      opacity: animation,
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              );
-                            });
-                          },
-                          child: Text(
-                            'Log Out',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ))),
-                ],
-              )
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return AudioApp(
+                            kUrl: widget.music_snapshots.MusicUrl,
+                            image: widget.music_snapshots.ImageUrl,
+                            name: widget.music_snapshots.AlbumName,
+                            title: widget.music_snapshots.TrackName,
+                          );
+                        },
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                      ));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset('assets/images/play.png',
+                      width: 30, height: 30),
+                ),
+              ),
             ],
             flexibleSpace: Container(
               padding: const EdgeInsets.only(top: 25.0),
@@ -186,145 +189,115 @@ class _GuessePageState extends State<GuessePage> {
                                           child: SvgPicture.asset(
                                               'assets/images/help.svg')),
                                     ),
-                                    Tab(
-                                      icon: Text(
+                                    Align(
+                                      alignment: Alignment.topCenter,
+                                      child: Text(
                                         'Line ${humanize.appNumber(index + 1)}',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16),
                                       ),
-                                      child: Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 20, top: 12),
-                                            child: Row(children: [
-                                              Flexible(
-                                                  child: products[index]
-                                                              .LineOne
-                                                              .toString()
-                                                              .toLowerCase() !=
-                                                          'guess'
-                                                      ? Text(
-                                                          '${products[index].LineOne}   ',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.black),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                        )
-                                                      : Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            border: Border.all(
-                                                                color: Colors
-                                                                    .black38),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        5),
-                                                          ),
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(3.0),
-                                                            child: Text(
-                                                                '${products[index].LineOne}',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Colors
-                                                                      .black38,
-                                                                ),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center),
-                                                          ),
-                                                        )),
-                                              Flexible(
-                                                  child: products[index]
-                                                              .LineTwo
-                                                              .toString()
-                                                              .toLowerCase() !=
-                                                          'guess'
-                                                      ? Text(
-                                                          '${products[index].LineTwo}   ',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.black),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                        )
-                                                      : Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            border: Border.all(
-                                                                color: Colors
-                                                                    .black38),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        5),
-                                                          ),
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(3.0),
-                                                            child: Text(
-                                                                '${products[index].LineTwo}',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Colors
-                                                                      .black38,
-                                                                ),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center),
-                                                          ),
-                                                        )),
-                                              Flexible(
-                                                  child: products[index]
-                                                              .LineThree
-                                                              .toString()
-                                                              .toLowerCase() !=
-                                                          'guess'
-                                                      ? Text(
-                                                          '${products[index].LineThree}   ',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.black),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                        )
-                                                      : Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            border: Border.all(
-                                                                color: Colors
-                                                                    .black38),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        5),
-                                                          ),
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(3.0),
-                                                            child: Text(
-                                                                '${products[index].LineThree}',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Colors
-                                                                      .black38,
-                                                                ),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center),
-                                                          ),
-                                                        )),
-                                            ]),
-                                          )),
                                     ),
+                                    Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 20, top: 12, right: 20),
+                                          child: Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                1.1,
+                                            child: RichText(
+                                              text:
+                                                  TextSpan(children: <TextSpan>[
+                                                TextSpan(
+                                                    text:
+                                                        ' ${products[index].LineOne.toLowerCase() == 'guess' ? products[index].LineOne + '??' : products[index].LineOne} ',
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          'CircularStd-Book',
+                                                      background: products[
+                                                                      index]
+                                                                  .LineOne
+                                                                  .toLowerCase() ==
+                                                              'guess'
+                                                          ? paint
+                                                          : null,
+                                                      color: products[index]
+                                                                  .LineOne
+                                                                  .toLowerCase() ==
+                                                              'guess'
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                      fontWeight: products[
+                                                                      index]
+                                                                  .LineOne
+                                                                  .toLowerCase() ==
+                                                              'guess'
+                                                          ? FontWeight.w900
+                                                          : null,
+                                                    )),
+                                                TextSpan(
+                                                    text:
+                                                        ' ${products[index].LineTwo.toLowerCase() == 'guess' ? products[index].LineTwo + '??' : products[index].LineTwo} ',
+                                                    style: TextStyle(
+                                                      background: products[
+                                                                      index]
+                                                                  .LineTwo
+                                                                  .toLowerCase() ==
+                                                              'guess'
+                                                          ? paint
+                                                          : null,
+                                                      fontFamily:
+                                                          'CircularStd-Book',
+                                                      color: products[index]
+                                                                  .LineTwo
+                                                                  .toLowerCase() ==
+                                                              'guess'
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                      fontWeight: products[
+                                                                      index]
+                                                                  .LineTwo
+                                                                  .toLowerCase() ==
+                                                              'guess'
+                                                          ? FontWeight.w900
+                                                          : null,
+                                                    )),
+                                                TextSpan(
+                                                  text:
+                                                      ' ${products[index].LineThree.toLowerCase() == 'guess' ? products[index].LineThree + '??' : products[index].LineThree} ',
+                                                  style: TextStyle(
+                                                    fontFamily:
+                                                        'CircularStd-Book',
+                                                    background: products[index]
+                                                                .LineThree
+                                                                .toLowerCase() ==
+                                                            'guess'
+                                                        ? paint
+                                                        : null,
+                                                    color: products[index]
+                                                                .LineThree
+                                                                .toLowerCase() ==
+                                                            'guess'
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                    fontWeight: products[index]
+                                                                .LineThree
+                                                                .toLowerCase() ==
+                                                            'guess'
+                                                        ? FontWeight.w900
+                                                        : null,
+                                                  ),
+                                                ),
+                                              ]),
+                                            ),
+                                          ),
+                                        )
+//
+//
+                                        ),
                                     Spacer(),
                                     Align(
                                         alignment: Alignment.topLeft,
@@ -349,31 +322,32 @@ class _GuessePageState extends State<GuessePage> {
                                                   child: Form(
                                                     key: form_key,
                                                     child: TextFormField(
+                                                      controller: text_controller,
                                                         maxLines: null,
-                                                        validator: (value) {
-                                                          if (value.isEmpty) {
-                                                            return 'Your Answer';
-                                                          } else {
-                                                            answer = value;
-                                                            return null;
-                                                          }
-                                                        },
+                                                        
                                                         decoration:
                                                             InputDecoration(
                                                           contentPadding:
-                                                              EdgeInsets.symmetric(vertical:4,horizontal: 6),
+                                                              EdgeInsets
+                                                                  .symmetric(
+                                                                      vertical:
+                                                                          4,
+                                                                      horizontal:
+                                                                          6),
                                                           hintStyle: TextStyle(
                                                               fontSize: 15),
                                                           labelStyle: TextStyle(
-                                                              color:
-                                                                  Colors.black38,
+                                                              color: Colors
+                                                                  .black38,
                                                               fontSize: 15),
-                                                          labelText: ' Type here',
+                                                          labelText:
+                                                              ' Type here',
                                                           enabledBorder:
                                                               OutlineInputBorder(
                                                             borderRadius:
                                                                 BorderRadius
-                                                                    .circular(24),
+                                                                    .circular(
+                                                                        24),
                                                             borderSide:
                                                                 BorderSide(
                                                                     color: Colors
@@ -384,7 +358,8 @@ class _GuessePageState extends State<GuessePage> {
                                                               OutlineInputBorder(
                                                             borderRadius:
                                                                 BorderRadius
-                                                                    .circular(24),
+                                                                    .circular(
+                                                                        24),
                                                             borderSide:
                                                                 BorderSide(
                                                                     color: Colors
@@ -395,7 +370,8 @@ class _GuessePageState extends State<GuessePage> {
                                                               OutlineInputBorder(
                                                             borderRadius:
                                                                 BorderRadius
-                                                                    .circular(24),
+                                                                    .circular(
+                                                                        24),
                                                             borderSide:
                                                                 BorderSide(
                                                                     color: Colors
@@ -409,9 +385,7 @@ class _GuessePageState extends State<GuessePage> {
                                               webservices.login_state == false
                                                   ? InkWell(
                                                       onTap: () {
-                                                        if (form_key
-                                                            .currentState
-                                                            .validate()) {
+                                                      
                                                           try {
                                                             if (index + 1 !=
                                                                 products
@@ -429,12 +403,12 @@ class _GuessePageState extends State<GuessePage> {
                                                                     .getCurrentDate2Format()
                                                                     .toString(),
                                                                 email: userDocument[
-                                                                        'Email'] ??
+                                                                        'email'] ??
                                                                     'UNKNOWN',
                                                                 name: userDocument[
-                                                                        'Name'] ??
+                                                                        'name'] ??
                                                                     'UNKNOWN',
-                                                                point: answer ==
+                                                                point: text_controller.text ==
                                                                         products[index]
                                                                             .answer
                                                                     ? 5 +
@@ -445,6 +419,7 @@ class _GuessePageState extends State<GuessePage> {
                                                                             'points'],
                                                               ).then((value) =>
                                                                   showNextQuestion(
+                                                                    text_controller,
                                                                       context,
                                                                       _controller,
                                                                       _kDuration,
@@ -466,15 +441,15 @@ class _GuessePageState extends State<GuessePage> {
                                                                     .getCurrentDate2Format()
                                                                     .toString(),
                                                                 email: userDocument[
-                                                                        'Email'] ??
+                                                                        'email'] ??
                                                                     'UNKNOWN',
                                                                 name: userDocument[
-                                                                        'Name'] ??
+                                                                        'name'] ??
                                                                     'UNKNOWN',
                                                                 userid:
                                                                     webservices
                                                                         .userid,
-                                                                point: answer ==
+                                                                point: text_controller.text ==
                                                                         products[index]
                                                                             .answer
                                                                     ? 5 +
@@ -484,17 +459,15 @@ class _GuessePageState extends State<GuessePage> {
                                                                         userDocument[
                                                                             'points'],
                                                               )
-                                                                  .then((value) =>
-                                                                      dialog.showGameSuccess(
-                                                                          context))
-                                                                  .then((value) =>
-                                                                      webservices
+                                                                  .then((value){
+                                                                     webservices
                                                                           .PostMyGuess(
                                                                         context:
                                                                             context,
                                                                         AlbumName: widget
                                                                             .music_snapshots
                                                                             .AlbumName,
+                                                                            ImageUrl: widget.music_snapshots.ImageUrl,
                                                                         MusicToken: widget
                                                                             .music_snapshots
                                                                             .MusicToken,
@@ -502,7 +475,7 @@ class _GuessePageState extends State<GuessePage> {
                                                                             .music_snapshots
                                                                             .MusicUrl,
                                                                         collection:
-                                                                            'MyGuesses',
+                                                                            'UserGuess',
                                                                         MusicLength: widget
                                                                             .music_snapshots
                                                                             .MusicLength,
@@ -511,15 +484,20 @@ class _GuessePageState extends State<GuessePage> {
                                                                         TrackName: widget
                                                                             .music_snapshots
                                                                             .TrackName,
-                                                                      ));
+                                                                      );
+                                                                      dialog.showGameSuccess(
+                                                                          context);
+                                                                          
+                                                                          });
+                                                                  
                                                             }
                                                           } catch (e) {
                                                             webservices
                                                                 .Login_SetState();
                                                             print(e);
                                                           }
-                                                        }
-                                                      },
+                                                        },
+                                                    
                                                       child: Container(
                                                         height: 40,
                                                         width: 60,
@@ -568,7 +546,7 @@ class _GuessePageState extends State<GuessePage> {
   }
 
   showNextQuestion(
-      context, _controller, _kDuration, _kCurve, products_length, index) {
+      text_controller,context, _controller, _kDuration, _kCurve, products_length, index) {
     return showDialog(
         barrierDismissible: false,
         child: WillPopScope(
@@ -619,6 +597,7 @@ class _GuessePageState extends State<GuessePage> {
                           onPressed: () {
                             if (index < products_length) {
                               Navigator.pop(context);
+                              text_controller.clear();
                               _controller.nextPage(
                                   duration: _kDuration, curve: _kCurve);
                             } else if (index > products_length) {

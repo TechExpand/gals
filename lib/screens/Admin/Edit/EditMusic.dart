@@ -20,6 +20,8 @@ class EditMusic extends StatelessWidget {
  var edit_imageurl;
  var edit_musicurl;
  
+
+ 
  EditMusic({
    this.edit_id,
    this.edit_albumname,
@@ -31,6 +33,11 @@ class EditMusic extends StatelessWidget {
  });
   @override
   Widget build(BuildContext context) {
+   final TextEditingController controller1 = TextEditingController();
+     final TextEditingController controller2 = TextEditingController();
+     final TextEditingController controller3 = TextEditingController();
+     final TextEditingController controller4 = TextEditingController();
+
     var webservices = Provider.of<Network>(context);
 var upload = Provider.of<FilePickers>(context, listen:false);
  final form_key = GlobalKey<FormState>();
@@ -39,14 +46,6 @@ Random _rnd = Random();
 
 String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
     length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
- var albumname;
- var tracktitle;
- var musictoken;
- var musiclength;
- var lineone;
- var linetwo;
- var linethree;
- var answer;
 
 
     return  Scaffold(
@@ -98,15 +97,8 @@ String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
                         padding: EdgeInsets.only( bottom:10),
                         width: 250,
                         child: TextFormField(
-                          initialValue: edit_albumname,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Album Name Required';
-                          } else {
-                            albumname = value;
-                            return null;
-                          }
-                        },
+                         
+                        controller: controller1,
                             style: TextStyle(color: Colors.black87),
                             cursorColor: Colors.white,
                             decoration: InputDecoration(
@@ -130,15 +122,8 @@ String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
                         padding: EdgeInsets.only(top:10, bottom:10),
                         width: 250,
                         child: TextFormField(
-                          initialValue: edit_tracktitle,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Track Name Required';
-                          } else {
-                            tracktitle = value;
-                            return null;
-                          }
-                        },
+                         
+                        controller: controller2,
                             style: TextStyle(color: Colors.black87),
                             cursorColor: Colors.white,
                             decoration: InputDecoration(
@@ -162,15 +147,8 @@ String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
                         padding: EdgeInsets.only(top:10, bottom:10),
                         width: 250,
                         child: TextFormField(
-                          initialValue: edit_musictoken,
-                         validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Music Token Required';
-                          } else {
-                            musictoken = value;
-                            return null;
-                          }
-                        },
+                     
+                        controller: controller3,
                             style: TextStyle(color: Colors.black87),
                             cursorColor: Colors.black87,
                             decoration: InputDecoration(
@@ -195,15 +173,8 @@ String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
                         padding: EdgeInsets.only(top:10, bottom:10),
                         width: 250,
                         child: TextFormField(
-                          initialValue: edit_musiclength,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Music Length Required';
-                          } else {
-                            musiclength = value;
-                            return null;
-                          }
-                        },
+                         
+                       controller: controller4,
                             style: TextStyle(color: Colors.black87),
                             cursorColor: Colors.black87,
                             decoration: InputDecoration(
@@ -232,19 +203,19 @@ String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
                           elevation: 25,
                           child:   webservices_consumer.login_state == false?FlatButton(
                            onPressed: (){
-                             if(form_key.currentState.validate()){
+//                             
                          webservices_consumer.Login_SetState();
                          webservices.UpdateGuessMusic(
                            context: context,
                             
-                            AlbumName: albumname,
-                            MusicLength: musiclength,
-                            MusicToken: musictoken,
-                            TrackName: tracktitle,
+                            AlbumName: controller1.text.isEmpty?edit_albumname: controller1.text,
+                            MusicLength: controller2.text.isEmpty?edit_musiclength: controller2.text,
+                            MusicToken:  controller3.text.isEmpty?edit_musictoken: controller3.text,
+                            TrackName:  controller4.text.isEmpty?edit_tracktitle: controller4.text,
                             collection: 'NewRelease',
                             id: edit_id,
                          );
-                        }
+                        
                        },  
                             color: Color(0xFF340c64),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
@@ -374,7 +345,7 @@ String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
                           elevation: 25,
                           child:   webservices_consumer.login_state == false?FlatButton(
                            onPressed: (){
-                             if(form_key.currentState.validate()){
+                            
                          webservices_consumer.Login_SetState();
                          webservices.UpdateGuessMusicFile(
                            context: context,
@@ -383,7 +354,7 @@ String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
                             id: edit_id,
                             collection: 'NewRelease',
                          );
-                        }
+                        
                        },  
                             color: Color(0xFF340c64),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),

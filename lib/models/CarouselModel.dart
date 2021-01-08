@@ -6,18 +6,19 @@ class Carousel {
   String TrackName;
   String time;
   String rate;
-  String file;
+  String ImageUrl;
+  String MusicUrl;
   String Token;
-  String image;
 
-  Carousel({this.id, this.AlbumName, this.TrackName,this.time, this.image, this.Token, this.rate});
+
+  Carousel({this.id, this.AlbumName, this.TrackName,this.time,this.MusicUrl, this.ImageUrl, this.Token, this.rate});
 
   Carousel.fromMap(Map snapshot,String id) :
         id = id ?? '',
         AlbumName = snapshot['AlbumName'] ?? '',
         TrackName = snapshot['TrackName'] ?? '',
-        image = snapshot['image'] ?? '',
-        file = snapshot['file']??'',
+        ImageUrl = snapshot['ImageUrl'] ?? '',
+        MusicUrl = snapshot['MusicUrl']??'',
         Token = snapshot['Token'] ?? '',
         rate = snapshot['rate']??'',
         time = snapshot['time'] ?? '';
@@ -26,7 +27,8 @@ class Carousel {
     return {
       "AlbumName": AlbumName,
       "TrackName": TrackName,
-      "image": image,
+      "MusicUrl": MusicUrl,
+      'ImageUrl': ImageUrl,
       'rate': rate,
       "Token": Token,
       "time": time,

@@ -15,6 +15,8 @@ class EditQuestion extends StatelessWidget {
   var edit_linethree;
   var edit_answer;
 
+
+
   EditQuestion({
     this.edit_id,
     this.edit_lineone,
@@ -27,11 +29,13 @@ class EditQuestion extends StatelessWidget {
     var webservices = Provider.of<Network>(context);
     var upload = Provider.of<FilePickers>(context, listen:false);
     final form_key = GlobalKey<FormState>();
-    var lineone;
-    var linetwo;
-    var linethree;
-    var answer;
-
+   
+  
+  final TextEditingController controller1 = TextEditingController();
+   final TextEditingController controller2 = TextEditingController();
+  final TextEditingController controller3 = TextEditingController();
+   final TextEditingController controller4 = TextEditingController();
+ 
 
     return  Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -80,15 +84,8 @@ class EditQuestion extends StatelessWidget {
                             padding: EdgeInsets.only( bottom:10),
                             width: 250,
                             child: TextFormField(
-                                initialValue: edit_lineone,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'LineOne Required';
-                                  } else {
-                                    lineone = value;
-                                    return null;
-                                  }
-                                },
+                              
+                                controller: controller1,
                                 style: TextStyle(color: Colors.black87),
                                 cursorColor: Colors.white,
                                 decoration: InputDecoration(
@@ -112,15 +109,8 @@ class EditQuestion extends StatelessWidget {
                             padding: EdgeInsets.only(top:10, bottom:10),
                             width: 250,
                             child: TextFormField(
-                                initialValue: edit_linetwo,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'LineTwo Required';
-                                  } else {
-                                    linetwo = value;
-                                    return null;
-                                  }
-                                },
+                                
+                               controller: controller2,
                                 style: TextStyle(color: Colors.black87),
                                 cursorColor: Colors.white,
                                 decoration: InputDecoration(
@@ -144,15 +134,8 @@ class EditQuestion extends StatelessWidget {
                             padding: EdgeInsets.only(top:10, bottom:10),
                             width: 250,
                             child: TextFormField(
-                                initialValue: edit_linethree,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'Line Three Required';
-                                  } else {
-                                    linethree = value;
-                                    return null;
-                                  }
-                                },
+                               
+                               controller: controller3,
                                 style: TextStyle(color: Colors.black87),
                                 cursorColor: Colors.black87,
                                 decoration: InputDecoration(
@@ -177,15 +160,8 @@ class EditQuestion extends StatelessWidget {
                             padding: EdgeInsets.only(top:10, bottom:10),
                             width: 250,
                             child: TextFormField(
-                                initialValue: edit_answer,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'Music Length Required';
-                                  } else {
-                                    answer = value;
-                                    return null;
-                                  }
-                                },
+                                
+                               controller: controller4,
                                 style: TextStyle(color: Colors.black87),
                                 cursorColor: Colors.black87,
                                 decoration: InputDecoration(
@@ -214,18 +190,18 @@ class EditQuestion extends StatelessWidget {
                                   elevation: 25,
                                   child:   webservices_consumer.login_state == false?FlatButton(
                                     onPressed: (){
-                                      if(form_key.currentState.validate()){
+  //                                   
                                         webservices_consumer.Login_SetState();
                                         webservices.UpdateGuessQuestion(
                                           context: context,
                                           collection: 'Question',
-                                          LineOne: lineone,
-                                          LineTwo: linetwo,
-                                          LineThree: linethree,
-                                          answer: answer,
+                                          LineOne: controller1.text.isEmpty?edit_lineone: controller1.text,
+                                          LineTwo: controller2.text.isEmpty?edit_linetwo: controller2.text,
+                                          LineThree: controller3.text.isEmpty?edit_linethree: controller3.text,
+                                          answer: controller4.text.isEmpty?edit_answer: controller4.text,
                                           id: edit_id,
                                         );
-                                      }
+                                      
                                     },
                                     color: Color(0xFF340c64),
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),

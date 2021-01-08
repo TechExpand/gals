@@ -42,7 +42,7 @@ class AdminSlidder1State extends State<AdminSlidder1> {
             },
                       child: Center(child: Padding(
               padding: const EdgeInsets.only(left:3.0),
-              child: Text('Cancel', style: TextStyle(fontSize: 17,color: Colors.black, fontWeight: FontWeight.bold), overflow: TextOverflow.fade,),
+              child: Text('Cancel', style: TextStyle(fontSize: 14,color: Colors.black, fontWeight: FontWeight.bold), overflow: TextOverflow.fade,),
             )),
           ),
           backgroundColor: Colors.white,
@@ -83,7 +83,7 @@ class AdminSlidder1State extends State<AdminSlidder1> {
                                       topLeft: Radius.circular(20),
                                       bottomRight: Radius.circular(15)),
                                   child: Image.network(
-                                    products[index].image,
+                                    products[index].ImageUrl,
                                     fit: BoxFit.fitHeight,
                                   ),
                                 ),
@@ -169,10 +169,10 @@ class AdminSlidder1State extends State<AdminSlidder1> {
                                                                 EditSlidder1(
                                                                   edit_rate: products[index].rate,
                                                                   edit_tracktitle: products[index].TrackName,
-                                                                  edit_musicurl:   products[index].file,
+                                                                  edit_musicurl:   products[index].MusicUrl,
                                                                   edit_musictoken: products[index].Token,
                                                                   edit_musiclength:  products[index].time,
-                                                                  edit_imageurl:   products[index].image,
+                                                                  edit_imageurl:   products[index].ImageUrl,
                                                                   edit_albumname:   products[index].AlbumName,
                                                                   edit_id:   products[index].id,
                                                                 );

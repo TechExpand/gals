@@ -4,9 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:gal/Network/Network.dart';
 import 'package:gal/screens/HomeTabs/Home.dart';
-import 'package:gal/screens/Payment.dart';
 import 'package:gal/screens/Wallet.dart';
 import 'package:gal/utils/file_picker.dart';
 import 'package:number_selection/number_selection.dart';
@@ -385,7 +383,7 @@ class Dialogs with ChangeNotifier {
                     padding: EdgeInsets.only(top: 15, bottom: 15),
                     width: 250,
                     child: Text(
-                      'Insufficient funds please fund your Wallet now',
+                      'Insufficient funds',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 15,
@@ -438,7 +436,7 @@ class Dialogs with ChangeNotifier {
         context: context);
   }
 
-  buyTokens(context, userid, previous_token, wallet) {
+  buyTokens(context, userid, previous_token) {
     var totalAmount = 300;
     var quantity = 1;
     var num_of_tokens = 15;
@@ -450,10 +448,10 @@ class Dialogs with ChangeNotifier {
               Padding(
                 padding: const EdgeInsets.only(right: 60.0),
                 child: InkWell(
-                  onTap: (){
-                    Navigator.pop(context);
-                  },
-                  child: Icon(Icons.clear, color: Color(0xFF340c64))),
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: Icon(Icons.clear, color: Color(0xFF340c64))),
               ),
               Text('Buy Tokens', style: TextStyle(fontSize: 15))
             ]),
@@ -469,7 +467,7 @@ class Dialogs with ChangeNotifier {
                       padding: const EdgeInsets.only(bottom: 5.0),
                       child:  Image.asset('assets/images/buytoken.png', width: 80,
                         height: 80,),
-                      
+
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 20, bottom: 5),
@@ -563,23 +561,17 @@ class Dialogs with ChangeNotifier {
                                 borderRadius: BorderRadius.circular(26)),
                             child: FlatButton(
                               onPressed: () {
-                                if (int.parse(wallet) >= totalAmount) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Wallet(
-                                              quantity: quantity,
-                                              tokenAmount: totalAmount,
-                                              num_of_token: num_of_tokens,
-                                              wallet: wallet,
-                                              previous_token: previous_token,
-                                              userid: userid,
-                                            )),
-                                  );
-                                } else {
-                                  Navigator.of(context).pop();
-                                  showinsufficient(context);
-                                }
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Wallet(
+                                        quantity: quantity,
+                                        tokenAmount: totalAmount,
+                                        num_of_token: num_of_tokens,
+                                        previous_token: previous_token,
+                                        userid: userid,
+                                      )),
+                                );
                               },
                               color: Color(0xFF340c64),
                               shape: RoundedRectangleBorder(

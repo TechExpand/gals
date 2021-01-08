@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gal/screens/Admin/AdminPage/AdminGuess.dart';
 import 'package:gal/screens/HomeTabs/Home.dart';
 import 'Add/UploadGuess.dart';
-import 'Add/UploadMusic.dart';
 import 'Add/UploadSidder1.dart';
-import 'AdminPage/AdminMusic.dart';
 import 'AdminPage/AdminSlidder1.dart';
 
 class AdminPage extends StatefulWidget {
@@ -50,7 +48,7 @@ class AdminPageState extends State<AdminPage> {
               child: Text(
                 'Cancel',
                 style: TextStyle(
-                    fontSize: 17,
+                    fontSize: 14,
                     color: Colors.black,
                     fontWeight: FontWeight.bold),
                 overflow: TextOverflow.fade,
@@ -147,75 +145,6 @@ class AdminPageState extends State<AdminPage> {
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          color: Colors.black12,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          height: 1,
-                                          child: Text(''),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Align(
-                                            alignment: Alignment.center,
-                                            child: ListTile(
-                                              onTap: () {
-                                                return Navigator.push(
-                                                  context,
-                                                  PageRouteBuilder(
-                                                    pageBuilder: (context,
-                                                        animation,
-                                                        secondaryAnimation) {
-                                                      return AdminMusic();
-                                                    },
-                                                    transitionsBuilder:
-                                                        (context,
-                                                            animation,
-                                                            secondaryAnimation,
-                                                            child) {
-                                                      return FadeTransition(
-                                                        opacity: animation,
-                                                        child: child,
-                                                      );
-                                                    },
-                                                  ),
-                                                );
-                                              },
-                                              title: Text('New Release Music',
-                                                  style: TextStyle(
-                                                      color: Colors.black)),
-                                              subtitle: Text(
-                                                  'View All Music Posted',
-                                                  style: TextStyle(
-                                                      color: Colors.black54)),
-                                              trailing: InkWell(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      PageRouteBuilder(
-                                                        pageBuilder: (context,
-                                                            animation,
-                                                            secondaryAnimation) {
-                                                          return UploadMusic();
-                                                        },
-                                                        transitionsBuilder:
-                                                            (context,
-                                                                animation,
-                                                                secondaryAnimation,
-                                                                child) {
-                                                          return FadeTransition(
-                                                            opacity: animation,
-                                                            child: child,
-                                                          );
-                                                        },
-                                                      ),
-                                                    );
-                                                  },
-                                                  child: Icon(Icons.add,
-                                                      size: 30)),
-                                            ),
-                                          ),
-                                        ),
                                         Divider(),
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
@@ -244,10 +173,10 @@ class AdminPageState extends State<AdminPage> {
                                                   ),
                                                 );
                                               },
-                                              title: Text('Slidder1',
+                                              title: Text('Add New Music Release',
                                                   style: TextStyle(
                                                       color: Colors.black)),
-                                              subtitle: Text('view slidder1',
+                                              subtitle: Text('View All New Release',
                                                   style: TextStyle(
                                                       color: Colors.black54)),
                                               trailing: InkWell(
@@ -278,7 +207,6 @@ class AdminPageState extends State<AdminPage> {
                                             ),
                                           ),
                                         ),
-                                        Divider(),
                                       ],
                                     ),
                                   )

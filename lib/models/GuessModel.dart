@@ -10,7 +10,6 @@ class Guess {
   String Lineofday;
   String LineTwo;
   String created;
-  String expired;
   String LineThree;
   String answer;
 
@@ -23,7 +22,6 @@ class Guess {
     this.ImageUrl,
     this.MusicToken,
     this.created,
-    this.expired,
     this.LineOne,
     this.LineTwo,
     this.LineThree,
@@ -34,7 +32,6 @@ class Guess {
   Guess.fromMap(Map snapshot, String id)
       : id = id ?? '',
         created = snapshot['created'] ?? '',
-        expired = snapshot['expired'] ?? '',
         AlbumName = snapshot['AlbumName'] ?? '',
         MusicUrl = snapshot['MusicUrl'] ?? '',
         TrackName = snapshot['TrackName'] ?? '',
@@ -56,7 +53,6 @@ class Guess {
       "MusicLength": MusicLength,
       'LineTwo': LineTwo,
       'created': created,
-      'expired':expired,
       'LineOne': LineTwo,
       'LineThree': LineThree,
       'Lineofday': Lineofday,

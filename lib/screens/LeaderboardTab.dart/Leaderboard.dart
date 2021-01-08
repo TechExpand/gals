@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:gal/Network/Network.dart';
-import 'package:gal/screens/Admin/AdminPage.dart';
 import 'package:gal/screens/HomeTabs/Home.dart';
-import 'package:gal/screens/HomeTabs/LineofDay.dart';
 import 'package:gal/screens/LeaderboardTab.dart/Alltime.dart';
 import 'package:gal/screens/ShowAllPage/ShowAllMyGuesses.dart';
-import 'package:provider/provider.dart';
-
 import '../EditProfile.dart';
 import 'Month.dart';
 import 'Today.dart';
@@ -67,8 +62,11 @@ class Leaderboard extends StatelessWidget {
                             },
                           ),
                         );
-                      },
-                      child: SvgPicture.asset('assets/images/home.svg')),
+                      }, borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal : 15, vertical:4),
+                    
+                      child: SvgPicture.asset('assets/images/home.svg'))),
                   InkWell(
                     onTap: (){
                       Navigator.push(
@@ -85,7 +83,8 @@ class Leaderboard extends StatelessWidget {
                           },
                         ),
                       );
-                    },
+                    }, borderRadius: BorderRadius.circular(10),
+                   
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal:50.0),
                       child: SvgPicture.asset('assets/images/note.svg'),
@@ -107,12 +106,15 @@ class Leaderboard extends StatelessWidget {
                             },
                           ),
                         );
-                      },
+                      }, borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal : 15, vertical:4),
+                    
                       child: SvgPicture.asset(
                     'assets/images/user-profile.svg',
                     width: 30,
                     height: 30,
-                  ),),
+                  )),),
                 ],
               ),
             ),
